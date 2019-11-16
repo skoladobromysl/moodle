@@ -354,14 +354,14 @@ body.path-question-type {
 
 .que .correctness {
     &.correct {
-        background-color: $state-success-text;
+        background-color: $success;
     }
     &.partiallycorrect {
-        background-color: $state-warning-text;
+        background-color: $warning;
     }
     &.notanswered,
     &.incorrect {
-        background-color: $state-danger-text;
+        background-color: $danger;
     }
 }
 
