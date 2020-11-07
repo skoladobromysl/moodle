@@ -1,0 +1,36 @@
+[submodule "admin/tool/heartbeat"]
+	path = admin/tool/heartbeat
+	url = https://github.com/catalyst/moodle-tool_heartbeat.git
+[submodule "auth/oidc"]
+	path = auth/oidc
+	url = https://github.com/microsoft/moodle-auth_oidc.git
+[submodule "local/o365"]
+	path = local/o365
+	url = https://github.com/microsoft/moodle-local_o365.git
+[submodule "local/mailtest"]
+	path = local/mailtest
+	url = https://github.com/michael-milette/moodle-local_mailtest.git
+[submodule "report/editdates"]
+	path = report/editdates
+	url = https://github.com/moodleou/moodle-report_editdates.git
+[submodule "repository/office365"]
+	path = repository/office365
+	url = https://github.com/microsoft/moodle-repository_office365.git
+[submodule "blocks/microsoft"]
+	path = blocks/microsoft
+	url = https://github.com/microsoft/moodle-block_microsoft.git
+[submodule "filter/oembed"]
+	path = filter/oembed
+	url = https://github.com/PoetOS/moodle-filter_oembed.git
+[submodule "theme/boost_o365teams"]
+	path = theme/boost_o365teams
+	url = https://github.com/microsoft/moodle-theme_boost_o365teams.git
+[submodule "theme/fordson"]
+	path = theme/fordson
+	url = https://github.com/dbnschools/moodle-theme_fordson.git
+[submodule "theme/moove"]
+	path = theme/moove
+	url = https://github.com/willianmano/moodle-theme_moove.git
+[submodule "mod/checklist"]
+	path = mod/checklist
+	url = https://github.com/davosmith/moodle-checklist.git

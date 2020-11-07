@@ -566,6 +566,24 @@ class core_course_renderer extends plugin_renderer_base {
                 $output .= html_writer::end_tag('div');
                 $output .= html_writer::end_tag('form');
             } else {
+                
+                // TK: add auto-submitted to completionicon if submission was already made
+                if ($completiondata->completionstate == COMPLETION_COMPLETE_FAIL || $completiondata->completionstate == COMPLETION_INCOMPLETE) {
+                    require_once($CFG->dirroot . '/mod/assign/locallib.php');
+                    $context = context_module::instance($mod->id);
+                    $assignment = new assign($context, $mod, $course);
+                    if (has_capability('mod/assign:submit', $context)) {
+                        if ($assignment->get_instance()->teamsubmission) {
+                            $usersubmission = $assignment->get_group_submission($USER->id, 0, false);
+                        } else {
+                            $usersubmission = $assignment->get_user_submission($USER->id, false);
+                        }
+                        if ($usersubmission->status == ASSIGN_SUBMISSION_STATUS_SUBMITTED) {
+                            $completionicon = 'auto-submitted';
+                        }
+                    }
+                }
+
                 // In auto mode, the icon is just an image.
                 $completionpixicon = new pix_icon('i/completion-'.$completionicon, $imgalt, '',
                         array('title' => $imgalt));

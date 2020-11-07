@@ -107,6 +107,7 @@ class renderer_base {
             $pixhelper = new \core\output\mustache_pix_helper($this);
             $shortentexthelper = new \core\output\mustache_shorten_text_helper();
             $userdatehelper = new \core\output\mustache_user_date_helper();
+            $uniqidhelper = new \core\output\mustache_uniqid_helper();
 
             // We only expose the variables that are exposed to JS templates.
             $safeconfig = $this->page->requires->get_config_for_javascript($this->page, $this);
@@ -118,6 +119,7 @@ class renderer_base {
                              'pix' => array($pixhelper, 'pix'),
                              'shortentext' => array($shortentexthelper, 'shorten'),
                              'userdate' => array($userdatehelper, 'transform'),
+                             'uniqid' => array($uniqidhelper, 'uniqid'),
                          );
 
             $this->mustache = new \core\output\mustache_engine(array(

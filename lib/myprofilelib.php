@@ -110,9 +110,15 @@ function core_myprofile_navigation(core_user\output\myprofile\tree $tree, $user,
     }
 
     // Login as ...
-    if (!$user->deleted && !$iscurrentuser &&
-                !\core\session\manager::is_loggedinas() && has_capability('moodle/user:loginas',
-                $courseorsystemcontext) && !is_siteadmin($user->id)) {
+//TK: přidána kontrola na loginas v usercontextu BEGIN ********************************************************************************************************
+//    if (!$user->deleted && !$iscurrentuser &&
+//                !\core\session\manager::is_loggedinas() && has_capability('moodle/user:loginas',
+//                $courseorsystemcontext) && !is_siteadmin($user->id)) { 
+	if (!$user->deleted && !$iscurrentuser &&
+                !\core\session\manager::is_loggedinas() && (has_capability('moodle/user:loginas',
+                $courseorsystemcontext) || has_capability('moodle/user:loginas',
+                $usercontext)) && !is_siteadmin($user->id)) {
+//TK: přidána kontrola na loginas v usercontextu END **********************************************************************************************************
         $url = new moodle_url('/course/loginas.php',
                 array('id' => $courseid, 'user' => $user->id, 'sesskey' => sesskey()));
         $node = new  core_user\output\myprofile\node('administration', 'loginas', get_string('loginas'), null, $url);

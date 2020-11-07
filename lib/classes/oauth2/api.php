@@ -205,7 +205,11 @@ class api {
         $mapping = [
             'givenName' => 'firstname',
             'surname' => 'lastname',
-            'userPrincipalName' => 'email',
+//TK: upraveno aby mapovalo mail místo loginu (userPrincipalName)  ************************************************************* BEGIN
+//            'userPrincipalName' => 'email',
+            'userPrincipalName' => 'username',
+            'mail' => 'email',
+//TK: upraveno aby mapovalo mail místo loginu (userPrincipalName)  *************************************************************** END
             'displayName' => 'alternatename',
             'officeLocation' => 'address',
             'mobilePhone' => 'phone1',

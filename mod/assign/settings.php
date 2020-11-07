@@ -24,6 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->libdir . '/grade/grade_scale.php');
 require_once($CFG->dirroot . '/mod/assign/adminlib.php');
 
 $ADMIN->add('modsettings', new admin_category('modassignfolder', new lang_string('pluginname', 'mod_assign'), $module->is_enabled() === false));
@@ -319,6 +320,34 @@ if ($ADMIN->fulltree) {
     $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
     $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
+/*** TK: default metoda hodnocení BEGIN ***/
+    $name = new lang_string('gradetype', 'mod_assign');
+    $description = new lang_string('gradetype_help', 'mod_assign');
+    $options = array(
+        'none' => get_string('modgradetypenone', 'grades'),
+        'scale' => get_string('modgradetypescale', 'grades'),
+        'point' => get_string('modgradetypepoint', 'grades'),
+    );
+    $setting = new admin_setting_configselect('assign/modgrade_type',
+                                                    $name, 
+                                                    $description,
+                                                    'none',
+                                                    $options);
+    $settings->add($setting);
+    $name = new lang_string('gradescale', 'mod_assign');
+    $description = new lang_string('gradescale_help', 'mod_assign');
+    $options = array();
+    $scales = grade_scale::fetch_all_global();
+    foreach($scales as $scale) {
+        $options[$scale->id] = $scale->get_name();
+    }
+    $setting = new admin_setting_configselect('assign/modgrade_scale',
+                                                    $name, 
+                                                    $description,
+                                                    -2,
+                                                    $options);
+    $settings->add($setting);
+/*** TK: default metoda hodnocení END ***/
 }
 
 $ADMIN->add('modassignfolder', $settings);

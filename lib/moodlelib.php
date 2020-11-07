@@ -2897,7 +2897,10 @@ function require_login($courseorid = null, $autologinguest = true, $cm = null, $
     if ($course->id == SITEID) {
         // Everybody is enrolled on the frontpage.
     } else {
-        if (\core\session\manager::is_loggedinas()) {
+//TK: upraveno pro loginas v usercontextu BEGIN ********************************************************************************************************
+//        if (\core\session\manager::is_loggedinas()) {
+        if (\core\session\manager::is_loggedinas() && $USER->loginascontext->contextlevel != USER_COURSE) {
+//TK: upraveno pro loginas v usercontextu END **********************************************************************************************************
             // Make sure the REAL person can access this course first.
             $realuser = \core\session\manager::get_realuser();
             if (!is_enrolled($coursecontext, $realuser->id, '', true) and

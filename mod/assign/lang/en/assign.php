@@ -634,3 +634,10 @@ $string['nolatesubmissions'] = 'No late submissions accepted. ';
 $string['nosubmissionsacceptedafter'] = 'No submissions accepted after ';
 $string['notsubmittedyet'] = 'Not submitted yet';
 $string['submissionsnotgraded'] = 'Submissions not graded: {$a}';
+
+
+//TK doplnění textů
+$string['gradetype'] = 'Default grade type';
+$string['gradetype_help'] = 'Default grade type for a new assignment.';
+$string['gradescale'] = 'Default grade scale';
+$string['gradescale_help'] = 'Default grade scale for a new assignment. Used only if the default grade type is set to "Scale"';

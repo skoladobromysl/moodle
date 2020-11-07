@@ -40,6 +40,10 @@ $course = $DB->get_record('course', array('id'=>$id), '*', MUST_EXIST);
 $systemcontext = context_system::instance();
 $coursecontext = context_course::instance($course->id);
 
+//TK: upraveno pro loginas v usercontextu BEGIN ********************************************************************************************************
+$usercontext = context_user::instance($userid, MUST_EXIST);
+//TK: upraveno pro loginas v usercontextu END **********************************************************************************************************
+
 require_login();
 
 if (has_capability('moodle/user:loginas', $systemcontext)) {

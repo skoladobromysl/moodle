@@ -60,9 +60,20 @@ class block_mentees extends block_base {
 
             $this->content->text = '<ul>';
             foreach ($usercontexts as $usercontext) {
-                $this->content->text .= '<li><a href="'.$CFG->wwwroot.'/user/view.php?id='.$usercontext->instanceid.'&amp;course='.SITEID.'">'.fullname($usercontext).'</a></li>';
+//TK: přidána možnost loginas BEGIN ********************************************************************************************************
+//                $this->content->text .= '<li><a href="'.$CFG->wwwroot.'/user/view.php?id='.$usercontext->instanceid.'&amp;course='.SITEID.'">'.fullname($usercontext).'</a></li>';
+                $this->content->text .= '<li><a href="'.$CFG->wwwroot.'/user/view.php?id='.$usercontext->instanceid.'&amp;course='.SITEID.'">'.fullname($usercontext).'</a>';
+				if ((has_capability('moodle/user:loginas',
+							context_system::instance()) || has_capability('moodle/user:loginas', 
+							context_user::instance($usercontext->instanceid))) && !is_siteadmin($usercontext->instanceid)) {
+					$url = new moodle_url('/course/loginas.php',
+							array('user' => $usercontext->instanceid, 'sesskey' => sesskey()));
+					$this->content->text .= ' (<a href="'.$url.'">'.get_string('loginas').')';
+				}
+				$this->content->text .= '</li>';
             }
             $this->content->text .= '</ul>';
+//TK: přidána možnost loginas END **********************************************************************************************************
         }
 
         $this->content->footer = '';
