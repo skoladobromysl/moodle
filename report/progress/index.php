@@ -412,9 +412,9 @@ foreach($progress as $user) {
             $assignment = new assign($context, $activity, $course);
             if (has_capability('mod/assign:submit', $context)) {
                 if ($assignment->get_instance()->teamsubmission) {
-                    $usersubmission = $assignment->get_group_submission($USER->id, 0, false);
+                    $usersubmission = $assignment->get_group_submission($user->id, 0, false);
                 } else {
-                    $usersubmission = $assignment->get_user_submission($USER->id, false);
+                    $usersubmission = $assignment->get_user_submission($user->id, false);
                 }
                 if ($usersubmission && $usersubmission->status == ASSIGN_SUBMISSION_STATUS_SUBMITTED) {
                     $completiontype = 'submitted';
