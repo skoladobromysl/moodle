@@ -19,9 +19,6 @@
 [submodule "blocks/microsoft"]
 	path = blocks/microsoft
 	url = https://github.com/microsoft/moodle-block_microsoft.git
-[submodule "filter/oembed"]
-	path = filter/oembed
-	url = https://github.com/PoetOS/moodle-filter_oembed.git
 [submodule "theme/boost_o365teams"]
 	path = theme/boost_o365teams
 	url = https://github.com/microsoft/moodle-theme_boost_o365teams.git
@@ -34,3 +31,6 @@
 [submodule "mod/checklist"]
 	path = mod/checklist
 	url = https://github.com/davosmith/moodle-checklist.git
+[submodule "filter/oembed"]
+	path = filter/oembed
+	url = https://github.com/PoetOS/moodle-filter_oembed.git
