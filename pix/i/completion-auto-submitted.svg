@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" preserveAspectRatio="xMinYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" width="16"
+   height="16"
+   viewBox="0 0 16 16" preserveAspectRatio="xMinYMid meet">
   <path
      d="M 10,0 V 2 H 6 V 0 Z m 1,2 h 1 c 1.104569,0 2,0.8954305 2,2 v 1 h 2 V 2 C 16,0.8954305 15.104569,0 14,0 h -3 z m 5,4 h -2 v 0.8264463 c 1.039533,0.8187558 0.936265,1.7458561 0,2.4132231 V 10 h 2 z m -2,5 v 1 c 0,1.104569 -0.895431,2 -2,2 h -1 v 2 h 3 c 1.104569,0 2,-0.895431 2,-2 v -3 z m -4,5 V 14 H 6 v 2 z M 5,14 H 4 C 2.8954305,14 2,13.104569 2,12 V 11 H 0 v 3 c 0,1.104569 0.8954305,2 2,2 H 5 Z M 0,10 H 2 V 6 H 0 Z M 2,5 V 4 C 2,2.8954305 2.8954305,2 4,2 H 5 V 0 H 2 C 0.8954305,0 0,0.8954305 0,2 v 3 z"
      fill="#949494"
