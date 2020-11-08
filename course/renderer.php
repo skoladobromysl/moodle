@@ -568,7 +568,9 @@ class core_course_renderer extends plugin_renderer_base {
             } else {
                 
                 // TK: add auto-submitted to completionicon if submission was already made
-                if ($completiondata->completionstate == COMPLETION_COMPLETE_FAIL || $completiondata->completionstate == COMPLETION_INCOMPLETE) {
+                if ($completion == COMPLETION_TRACKING_AUTOMATIC && (
+                        $completiondata->completionstate == COMPLETION_COMPLETE_FAIL || 
+                        $completiondata->completionstate == COMPLETION_INCOMPLETE)) {
                     require_once($CFG->dirroot . '/mod/assign/locallib.php');
                     $context = context_module::instance($mod->id);
                     $assignment = new assign($context, $mod, $course);

@@ -405,7 +405,9 @@ foreach($progress as $user) {
         $completiontrackingstring = $activity->completion == COMPLETION_TRACKING_AUTOMATIC ? 'auto' : 'manual';
         
         // TK: add auto-submitted to completionicon if submission was already made
-        if ($state == COMPLETION_COMPLETE_FAIL || $state == COMPLETION_INCOMPLETE) {
+        if ($activity->completion == COMPLETION_TRACKING_AUTOMATIC && (
+                $state == COMPLETION_COMPLETE_FAIL || 
+                $state == COMPLETION_INCOMPLETE )) {
             require_once($CFG->dirroot . '/mod/assign/locallib.php');
             $assignment = new assign($context, $activity, $course);
             if (has_capability('mod/assign:submit', $context)) {
