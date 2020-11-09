@@ -410,7 +410,7 @@ foreach($progress as $user) {
                 $state == COMPLETION_INCOMPLETE )) {
             require_once($CFG->dirroot . '/mod/assign/locallib.php');
             $assignment = new assign($context, $activity, $course);
-            if (has_capability('mod/assign:submit', $context)) {
+//            if (has_capability('mod/assign:submit', $context)) {
                 if ($assignment->get_instance()->teamsubmission) {
                     $usersubmission = $assignment->get_group_submission($user->id, 0, false);
                 } else {
@@ -419,7 +419,7 @@ foreach($progress as $user) {
                 if ($usersubmission && $usersubmission->status == ASSIGN_SUBMISSION_STATUS_SUBMITTED) {
                     $completiontype = 'submitted';
                 }
-            }
+//            }
         }
 
         $completionicon = 'completion-' . $completiontrackingstring. '-' . $completiontype;
