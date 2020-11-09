@@ -47,3 +47,4 @@ atlassian-ide-plugin.xml
 .htaccess
 benchmark.php
 favicon.ico
+.vscode/launch.json
