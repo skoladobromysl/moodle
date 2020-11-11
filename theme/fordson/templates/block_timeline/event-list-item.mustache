@@ -68,6 +68,9 @@
                 {{#userdate}} {{timesort}}, {{#str}} strftimetime24, core_langconfig {{/str}} {{/userdate}}
             </h6>
             {{/action.actionable}}
+            {{^action.actionable}}
+            <div class="col-md-3 col-xs-6 mx-3" />
+            {{/action.actionable}}
         </div>
 
     </div>
