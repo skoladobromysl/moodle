@@ -45,26 +45,26 @@
     data-region="event-list-item"
     >
     <div class="d-flex">
-        <div class="icon-size-4 d-flex align-self-top ">
+        <div class="icon-size-4 align-self-top my-1">
             {{#icon}}{{#pix}} {{key}}, {{component}}, {{alttext}} {{/pix}}{{/icon}}
         </div>
-        <div class="w-100 event-name-container text-truncate line-height-2 d-flex justify-content-between flex-wrap">
+        <div class="w-100 event-name-container text-truncate line-height-2 row justify-content-between align-items-center flex-wrap">
             <a href="{{url}}"
                title={{#quote}}{{{name}}}{{/quote}}
-               class=""
+               class="col-md-6 col-xs-11"
                aria-label='{{#str}} ariaeventlistitem, block_timeline, { "name": {{#quote}}{{{name}}}{{/quote}}, "course": {{#quote}}{{{course.fullnamedisplay}}}{{/quote}}, "date": "{{#userdate}} {{timesort}}, {{#str}} strftimedatetime, core_langconfig {{/str}} {{/userdate}}" } {{/str}}'
-            ><h6 class="event-name text-truncate mb-0">{{{name}}}</h6></a>
+            ><h6 class="event-name text-truncate my-1">{{{name}}}</h6></a>
             {{#course.fullnamedisplay}}
-            <h6 class="text-muted text-truncate mb-0 px-1">{{{course.fullnamedisplay}}}</h6>
+            <h6 class="text-muted text-truncate my-1 col-md-2 col-xs-6">{{{course.fullnamedisplay}}}</h6>
             {{/course.fullnamedisplay}}
             {{#action.actionable}}
-            <h6 class="mb-0">
+            <small class="my-1 col-md-2 col-xs-4">
                 <a href="{{action.url}}" aria-label="{{action.name}}" title="{{action.name}}" class="list-group-item-action">{{{action.name}}}</a>
                 {{#action.showitemcount}}
                 <span class="badge badge-secondary">{{action.itemcount}}</span>
                 {{/action.showitemcount}}
-            </h6>
-            <h6 class="text-right text-nowrap mb-0 px-1">
+            </small> 
+            <h6 class="text-right text-nowrap my-1 col-md-1 col-xs-2">
                 {{#userdate}} {{timesort}}, {{#str}} strftimetime24, core_langconfig {{/str}} {{/userdate}}
             </h6>
             {{/action.actionable}}
