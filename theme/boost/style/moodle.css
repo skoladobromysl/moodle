@@ -11646,6 +11646,10 @@ body.h5p-embed .h5pmessages {
   overflow-wrap: break-word !important;
   /* stylelint-disable-line declaration-no-important */ }
 
+.word-break {
+  word-break: break-word !important;
+  /* stylelint-disable-line declaration-no-important */ }
+
 .z-index-0 {
   z-index: 0 !important;
   /* stylelint-disable-line declaration-no-important */ }
@@ -17408,9 +17412,13 @@ div#dock {
   clear: left; }
 
 #page-mod-quiz-mod #id_reviewoptionshdr .form-check {
-  width: 90%;
+  width: auto;
   height: 22px;
   justify-content: flex-start; }
+
+#page-mod-quiz-mod #id_reviewoptionshdr .review_option_item {
+  width: 90%;
+  height: 22px; }
 
 .path-mod-quiz #mod_quiz_navblock .qnbutton {
   text-decoration: none;
