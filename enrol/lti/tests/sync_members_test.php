@@ -59,7 +59,7 @@ class sync_members_testcase extends advanced_testcase {
     /** @var  ResourceLink $resourcelink */
     protected $resourcelink;
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
 
         // Set this user as the admin.
@@ -136,7 +136,7 @@ class sync_members_testcase extends advanced_testcase {
         $this->task->execute();
         $output = ob_get_clean();
         $message = 'Skipping task - ' . get_string('pluginnotenabled', 'auth', get_string('pluginname', 'auth_lti'));
-        $this->assertStringContainsString($message, $output);
+        $this->assertContains($message, $output);
     }
 
     /**
@@ -150,7 +150,7 @@ class sync_members_testcase extends advanced_testcase {
         $this->task->execute();
         $output = ob_get_clean();
         $message = 'Skipping task - ' . get_string('enrolisdisabled', 'enrol_lti');
-        $this->assertStringContainsString($message, $output);
+        $this->assertContains($message, $output);
     }
 
     /**
@@ -168,10 +168,10 @@ class sync_members_testcase extends advanced_testcase {
         $output = ob_get_clean();
 
         $membersyncmessage = "Completed - Synced members for tool '{$this->tool->id}' in the course '{$this->tool->courseid}'";
-        $this->assertStringContainsString($membersyncmessage, $output);
+        $this->assertContains($membersyncmessage, $output);
 
         $imagesyncmessage = "Completed - Synced 0 profile images.";
-        $this->assertStringContainsString($imagesyncmessage, $output);
+        $this->assertContains($imagesyncmessage, $output);
     }
 
     /**

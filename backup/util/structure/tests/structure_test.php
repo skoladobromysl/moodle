@@ -53,7 +53,7 @@ class backup_structure_testcase extends advanced_testcase {
     protected $contextid;
 
 
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
 
         $this->resetAfterTest(true);

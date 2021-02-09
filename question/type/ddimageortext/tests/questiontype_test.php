@@ -40,11 +40,11 @@ class qtype_ddimageortext_test extends basic_testcase {
     /** @var qtype_ddimageortext instance of the question type class to test. */
     protected $qtype;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->qtype = question_bank::get_qtype('ddimageortext');;
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->qtype = null;
     }
 

@@ -202,11 +202,8 @@ class participants extends \table_sql implements dynamic_table {
         if ($canseegroups) {
             $this->groups = groups_get_all_groups($this->courseid, 0, 0, 'g.*', true);
         }
-
-        // If user has capability to review enrol, show them both role names.
-        $allrolesnamedisplay = ($canreviewenrol ? ROLENAME_BOTH : ROLENAME_ALIAS);
-        $this->allroles = role_fix_names(get_all_roles($this->context), $this->context, $allrolesnamedisplay);
-        $this->assignableroles = get_assignable_roles($this->context, ROLENAME_BOTH, false);
+        $this->allroles = role_fix_names(get_all_roles($this->context), $this->context);
+        $this->assignableroles = get_assignable_roles($this->context, ROLENAME_ALIAS, false);
         $this->profileroles = get_profile_roles($this->context);
         $this->viewableroles = get_viewable_roles($this->context);
 

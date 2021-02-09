@@ -39,7 +39,7 @@ class core_rating_testcase extends advanced_testcase {
     protected $neededcaps = array('view', 'viewall', 'viewany', 'rate');
     protected $originaldefaultfrontpageroleid;
 
-    public function setUp(): void {
+    public function setUp() {
         global $CFG;
         parent::setUp();
 

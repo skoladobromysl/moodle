@@ -29,15 +29,13 @@ define(
     'jquery',
     'core/pubsub',
     'core/str',
-    'core_message/message_drawer_events',
-    'core/aria',
+    'core_message/message_drawer_events'
 ],
 function(
     $,
     PubSub,
     Str,
-    MessageDrawerEvents,
-    Aria
+    MessageDrawerEvents
 ) {
 
     /* @var {object} routes Message drawer route elements and callbacks. */
@@ -114,15 +112,15 @@ function(
                         element.attr('data-from-panel', true);
                     }
                     element.removeClass('hidden');
-                    Aria.unhide(element.get());
+                    element.attr('aria-hidden', false);
                 } else {
                     // For the message index page elements in the left panel should not be hidden.
                     if (!element.attr('data-in-panel')) {
                         element.addClass('hidden');
-                        Aria.hide(element.get());
+                        element.attr('aria-hidden', true);
                     } else if (newRoute == 'view-search' || newRoute == 'view-overview') {
                         element.addClass('hidden');
-                        Aria.hide(element.get());
+                        element.attr('aria-hidden', true);
                     }
                 }
             });

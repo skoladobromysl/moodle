@@ -42,7 +42,7 @@ class core_h5p_event_h5p_deleted_testcase extends advanced_testcase {
     /**
      * Setup test.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
         autoloader::register();
     }

@@ -142,7 +142,7 @@ function tool_dbtransfer_get_drivers() {
         $dblibrary = $matches[2];
 
         if ($dbtype === 'sqlite3') {
-            // The sqlite3 driver is not fully working yet and should not be returned.
+            // Blacklist unfinished drivers.
             continue;
         }
 

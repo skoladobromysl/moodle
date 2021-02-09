@@ -54,31 +54,23 @@ class event_times implements times_interface {
     protected $modified;
 
     /**
-     * @var \DateTimeImmutable $usermidnight User midnight for the event.
-     */
-    protected $usermidnight;
-
-    /**
      * Constructor.
      *
-     * @param \DateTimeImmutable $start        Event start time.
-     * @param \DateTimeImmutable $end          Event end time.
-     * @param \DateTimeImmutable $sort         Date used to sort events.
-     * @param \DateTimeImmutable $modified     Time event was last updated.
-     * @param \DateTimeImmutable $usermidnight User midnight for the event.
+     * @param \DateTimeImmutable $start    Event start time.
+     * @param \DateTimeImmutable $end      Event end time.
+     * @param \DateTimeImmutable $sort     Date used to sort events.
+     * @param \DateTimeImmutable $modified Time event was last updated.
      */
     public function __construct(
         \DateTimeImmutable $start,
         \DateTimeImmutable $end,
         \DateTimeImmutable $sort,
-        \DateTimeImmutable $modified,
-        \DateTimeImmutable $usermidnight
+        \DateTimeImmutable $modified
     ) {
         $this->start = $start;
         $this->end = $end;
         $this->sort = $sort;
         $this->modified = $modified;
-        $this->usermidnight = $usermidnight;
     }
 
     public function get_start_time() {
@@ -99,14 +91,5 @@ class event_times implements times_interface {
 
     public function get_sort_time() {
         return $this->sort;
-    }
-
-    /**
-     * Getter for usermidnight.
-     *
-     * @return \DateTimeImmutable
-     */
-    public function get_usermidnight_time() {
-        return $this->usermidnight;
     }
 }

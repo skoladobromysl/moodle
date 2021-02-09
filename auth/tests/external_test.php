@@ -46,7 +46,7 @@ class core_auth_external_testcase extends externallib_advanced_testcase {
     /**
      * Set up for every test
      */
-    public function setUp(): void {
+    public function setUp() {
         global $CFG;
 
         $this->resetAfterTest(true);
@@ -60,7 +60,7 @@ class core_auth_external_testcase extends externallib_advanced_testcase {
     /**
      * Tear down to restore old logging..
      */
-    protected function tearDown(): void {
+    protected function tearDown() {
         ini_set('error_log', $this->oldlog);
         parent::tearDown();
     }

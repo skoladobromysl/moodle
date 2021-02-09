@@ -73,7 +73,7 @@ class core_requirejs_testcase extends advanced_testcase {
             if (strpos($component, '_') === false) {
                 $this->assertEquals('core', $component);
             }
-            $this->assertStringNotContainsString('.min', $path);
+            $this->assertNotContains('.min', $path);
         }
 
         // Find all modules - debugging.
@@ -88,7 +88,7 @@ class core_requirejs_testcase extends advanced_testcase {
                 $this->assertEquals('core', $component);
             }
 
-            $this->assertStringContainsString('.min', $path);
+            $this->assertContains('.min', $path);
         }
 
     }

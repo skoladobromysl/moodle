@@ -83,7 +83,7 @@ class mod_data_external_testcase extends externallib_advanced_testcase {
     /**
      * Set up for every test
      */
-    public function setUp(): void {
+    public function setUp() {
         global $DB;
         $this->resetAfterTest();
         $this->setAdminUser();

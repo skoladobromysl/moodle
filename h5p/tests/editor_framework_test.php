@@ -45,7 +45,7 @@ class editor_framework_testcase extends \advanced_testcase {
     /**
      * Set up function for tests.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
 
         autoloader::register();

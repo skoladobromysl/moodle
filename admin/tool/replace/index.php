@@ -57,7 +57,7 @@ if (!$data = $form->get_data()) {
 $PAGE->requires->js_init_code("window.scrollTo(0, 5000000);");
 
 echo $OUTPUT->box_start();
-db_replace($data->search, $data->replace, $data->additionalskiptables);
+db_replace($data->search, $data->replace);
 echo $OUTPUT->box_end();
 
 // Course caches are now rebuilt on the fly.

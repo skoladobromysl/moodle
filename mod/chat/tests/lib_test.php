@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 class mod_chat_lib_testcase extends advanced_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
     }
 

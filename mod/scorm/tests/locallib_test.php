@@ -39,7 +39,7 @@ require_once($CFG->dirroot . '/mod/scorm/lib.php');
  */
 class mod_scorm_locallib_testcase extends advanced_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
     }
 

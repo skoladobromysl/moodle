@@ -1,11 +1,6 @@
 M.gradereport_singleview = {};
 
 M.gradereport_singleview.init = function(Y) {
-    if (this.initialised) {
-        return;
-    }
-    this.initialised = true;
-
     var getColumnIndex = function(cell) {
         var rowNode = cell.ancestor('tr');
         if (!rowNode || !cell) {
@@ -109,24 +104,7 @@ M.gradereport_singleview.init = function(Y) {
 
         link.on('click', function(e) {
             e.preventDefault();
-            var selectall = link.hasClass('all');
-            var self = this;
-            if ((type === 'override') && !selectall) {
-                Y.use('moodle-core-notification-confirm', function() {
-                    var confirm = new M.core.confirm({
-                        title:      M.util.get_string('confirm', 'moodle'),
-                        question:   M.util.get_string('overridenoneconfirm', 'gradereport_singleview'),
-                    });
-                    confirm.on('complete-yes', function() {
-                        confirm.hide();
-                        confirm.destroy();
-                        Y.all('input[name^=' + type + ']').each(toggle(link.hasClass('all')));
-                    }, self);
-                    confirm.show();
-                });
-            } else {
-                Y.all('input[name^=' + type + ']').each(toggle(link.hasClass('all')));
-            }
+            Y.all('input[name^=' + type + ']').each(toggle(link.hasClass('all')));
         });
     });
 

@@ -488,10 +488,7 @@ class backup_course_structure_step extends backup_structure_step {
 
         $course->annotate_files('course', 'summary', null);
         $course->annotate_files('course', 'overviewfiles', null);
-
-        if ($this->get_setting_value('legacyfiles')) {
-            $course->annotate_files('course', 'legacy', null);
-        }
+        $course->annotate_files('course', 'legacy', null);
 
         // Return root element ($course)
 
@@ -1023,8 +1020,6 @@ class backup_gradebook_structure_step extends backup_structure_step {
             'plusfactor', 'aggregationcoef', 'aggregationcoef2', 'weightoverride',
             'sortorder', 'display', 'decimals', 'hidden', 'locked', 'locktime',
             'needsupdate', 'timecreated', 'timemodified'));
-
-        $this->add_plugin_structure('local', $grade_item, true);
 
         $grade_grades = new backup_nested_element('grade_grades');
         $grade_grade = new backup_nested_element('grade_grade', array('id'), array(

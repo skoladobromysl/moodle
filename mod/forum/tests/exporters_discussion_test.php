@@ -38,7 +38,7 @@ class mod_forum_exporters_discussion_testcase extends advanced_testcase {
     /**
      * Test set up function.
      */
-    public function setUp(): void {
+    public function setUp() {
         // We must clear the subscription caches. This has to be done both before each test, and after in case of other
         // tests using these functions.
         \mod_forum\subscriptions::reset_forum_cache();
@@ -50,7 +50,7 @@ class mod_forum_exporters_discussion_testcase extends advanced_testcase {
     /**
      * Test tear down function.
      */
-    public function tearDown(): void {
+    public function tearDown() {
         // We must clear the subscription caches. This has to be done both before each test, and after in case of other
         // tests using these functions.
         \mod_forum\subscriptions::reset_forum_cache();

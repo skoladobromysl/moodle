@@ -89,7 +89,7 @@ class repository_contentbank_browser_testcase extends advanced_testcase {
             ]
         ];
         $expected = $this->generate_expected_content($contextfolders, $contentbankcontents);
-        $this->assertEqualsCanonicalizing($expected, $repositorycontentnodes);
+        $this->assertEquals($expected, $repositorycontentnodes, '', 0.0, 10, true);
 
         // Log in as a user.
         $this->setUser($user);
@@ -101,7 +101,7 @@ class repository_contentbank_browser_testcase extends advanced_testcase {
         // the content of the category's courses.
         $this->assertCount(3, $repositorycontentnodes);
         $expected = $this->generate_expected_content([], $contentbankcontents);
-        $this->assertEqualsCanonicalizing($expected, $repositorycontentnodes);
+        $this->assertEquals($expected, $repositorycontentnodes, '', 0.0, 10, true);
 
         // Enrol the user as an editing teacher in the course.
         $editingteacherrole = $DB->get_field('role', 'id', ['shortname' => 'editingteacher']);
@@ -122,7 +122,7 @@ class repository_contentbank_browser_testcase extends advanced_testcase {
             ]
         ];
         $expected = $this->generate_expected_content($contextfolders, $contentbankcontents);
-        $this->assertEqualsCanonicalizing($expected, $repositorycontentnodes);
+        $this->assertEquals($expected, $repositorycontentnodes, '', 0.0, 10, true);
     }
 
     /**
@@ -197,7 +197,7 @@ class repository_contentbank_browser_testcase extends advanced_testcase {
             ]
         ];
         $expected = $this->generate_expected_content($contextfolders, $contentbankcontents);
-        $this->assertEqualsCanonicalizing($expected, $repositorycontents);
+        $this->assertEquals($expected, $repositorycontents, '', 0.0, 10, true);
 
         // Log in as an editing teacher enrolled in a child course.
         $this->setUser($editingteacher);
@@ -215,7 +215,7 @@ class repository_contentbank_browser_testcase extends advanced_testcase {
             ]
         ];
         $expected = $this->generate_expected_content($contextfolders, $contentbankcontents);
-        $this->assertEqualsCanonicalizing($expected, $repositorycontents);
+        $this->assertEquals($expected, $repositorycontents, '', 0.0, 10, true);
     }
 
     /**
@@ -302,7 +302,7 @@ class repository_contentbank_browser_testcase extends advanced_testcase {
         // course context.
         $this->assertCount(3, $repositorycontents);
         $expected = $this->generate_expected_content([], $contentbankcontents);
-        $this->assertEqualsCanonicalizing($expected, $repositorycontents);
+        $this->assertEquals($expected, $repositorycontents, '', 0.0, 10, true);
 
         // Log in as an editing teacher.
         $this->setUser($editingteacher);
@@ -314,7 +314,7 @@ class repository_contentbank_browser_testcase extends advanced_testcase {
         // course context.
         $this->assertCount(3, $repositorycontents);
         $expected = $this->generate_expected_content([], $contentbankcontents);
-        $this->assertEqualsCanonicalizing($expected, $repositorycontents);
+        $this->assertEquals($expected, $repositorycontents, '', 0.0, 10, true);
     }
 
     /**

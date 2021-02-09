@@ -1113,7 +1113,7 @@ EOF;
 
         // Do the rewrite.
         $finaltext = file_rewrite_pluginfile_urls($originaltext, 'pluginfile.php', $syscontext->id, 'user', 'private', 0);
-        $this->assertStringContainsString("pluginfile.php", $finaltext);
+        $this->assertContains("pluginfile.php", $finaltext);
 
         // Now undo.
         $options = array('reverse' => true);

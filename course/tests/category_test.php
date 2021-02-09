@@ -32,7 +32,7 @@ class core_course_category_testcase extends advanced_testcase {
 
     protected $roles;
 
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();

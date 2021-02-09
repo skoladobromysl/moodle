@@ -38,7 +38,7 @@ class core_gdlib_testcase extends basic_testcase {
 
     private $fixturepath = null;
 
-    public function setUp(): void {
+    public function setUp() {
         $this->fixturepath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
     }
 

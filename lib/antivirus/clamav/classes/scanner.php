@@ -228,9 +228,6 @@ class scanner extends \core\antivirus\scanner {
             $notice .= "\n\n". implode("\n", $output);
             $this->set_scanning_notice($notice);
             return self::SCAN_RESULT_ERROR;
-        } else {
-            $notice = "\n\n". implode("\n", $output);
-            $this->set_scanning_notice($notice);
         }
 
         return (int)$return;
@@ -387,8 +384,6 @@ class scanner extends \core\antivirus\scanner {
             $parts = explode(' ', $message);
             $status = array_pop($parts);
             if ($status === 'FOUND') {
-                $notice = "\n\n" . $output;
-                $this->set_scanning_notice($notice);
                 return self::SCAN_RESULT_FOUND;
             } else {
                 $notice = get_string('clamfailed', 'antivirus_clamav', $this->get_clam_error_code(2));

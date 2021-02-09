@@ -519,14 +519,15 @@ class mod_quiz_locallib_testcase extends advanced_testcase {
         $slotid = $DB->get_field('quiz_slots', 'id', array('quizid' => $quiz->id, 'slot' => 2));
         $slottags = quiz_retrieve_slot_tags($slotid);
 
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
                 [
                     ['tagid' => $tags['foo']->id, 'tagname' => $tags['foo']->name],
                     ['tagid' => $tags['bar']->id, 'tagname' => $tags['bar']->name]
                 ],
                 array_map(function($slottag) {
                     return ['tagid' => $slottag->tagid, 'tagname' => $slottag->tagname];
-                }, $slottags));
+                }, $slottags),
+                '', 0.0, 10, true);
     }
 
     public function test_quiz_retrieve_slot_tags_with_removed_tag() {
@@ -545,14 +546,15 @@ class mod_quiz_locallib_testcase extends advanced_testcase {
         core_tag_tag::delete_tags([$tags['foo']->id]);
         $slottags = quiz_retrieve_slot_tags($slotid);
 
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
                 [
                     ['tagid' => null, 'tagname' => $tags['foo']->name],
                     ['tagid' => $tags['bar']->id, 'tagname' => $tags['bar']->name]
                 ],
                 array_map(function($slottag) {
                     return ['tagid' => $slottag->tagid, 'tagname' => $slottag->tagname];
-                }, $slottags));
+                }, $slottags),
+                '', 0.0, 10, true);
     }
 
     public function test_quiz_retrieve_slot_tags_for_standard_question() {
@@ -582,7 +584,7 @@ class mod_quiz_locallib_testcase extends advanced_testcase {
         $slotid = $DB->get_field('quiz_slots', 'id', array('quizid' => $quiz->id, 'slot' => 2));
         $tagids = quiz_retrieve_slot_tag_ids($slotid);
 
-        $this->assertEqualsCanonicalizing([$tags['foo']->id, $tags['bar']->id], $tagids);
+        $this->assertEquals([$tags['foo']->id, $tags['bar']->id], $tagids, '', 0.0, 10, true);
     }
 
     public function test_quiz_retrieve_slot_tag_ids_for_standard_question() {
@@ -597,7 +599,7 @@ class mod_quiz_locallib_testcase extends advanced_testcase {
         $slotid = $DB->get_field('quiz_slots', 'id', array('quizid' => $quiz->id, 'slot' => 1));
         $tagids = quiz_retrieve_slot_tag_ids($slotid);
 
-        $this->assertEqualsCanonicalizing([], $tagids);
+        $this->assertEquals([], $tagids, '', 0.0, 10, true);
     }
 
     /**

@@ -41,11 +41,11 @@ require_once($CFG->dirroot . '/question/type/truefalse/edit_truefalse_form.php')
 class qtype_truefalse_test extends advanced_testcase {
     protected $qtype;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->qtype = new qtype_truefalse();
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->qtype = null;
     }
 
@@ -161,13 +161,13 @@ class qtype_truefalse_test extends advanced_testcase {
 
         foreach ($questiondata as $property => $value) {
             if (!in_array($property, array('options'))) {
-                $this->assertEquals($value, $actualquestiondata->$property);
+                $this->assertAttributeEquals($value, $property, $actualquestiondata);
             }
         }
 
         foreach ($questiondata->options as $optionname => $value) {
             if (!in_array($optionname, array('trueanswer', 'falseanswer', 'answers'))) {
-                $this->assertEquals($value, $actualquestiondata->options->$optionname);
+                $this->assertAttributeEquals($value, $optionname, $actualquestiondata->options);
             }
         }
 
@@ -177,7 +177,7 @@ class qtype_truefalse_test extends advanced_testcase {
             foreach ($answer as $ansproperty => $ansvalue) {
                 // This question does not use 'answerformat', will ignore it.
                 if (!in_array($ansproperty, array('id', 'question', 'answerformat'))) {
-                    $this->assertEquals($ansvalue, $actualanswer->$ansproperty);
+                    $this->assertAttributeEquals($ansvalue, $ansproperty, $actualanswer);
                 }
             }
             $answerindexes[$answer->answer] = $ansindex;

@@ -38,7 +38,7 @@ require_once($CFG->dirroot.'/lib/dml/sqlsrv_native_moodle_database.php');
  */
 class sqlsrv_native_moodle_database_testcase extends advanced_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         parent::setUp();
         $this->resetAfterTest();
     }

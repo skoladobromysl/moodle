@@ -165,7 +165,6 @@ class gradereport_user_external extends external_api {
                 'courseid'      => $course->id,
                 'userid'        => $user->id,
                 'userfullname'  => fullname($user),
-                'useridnumber'  => $user->idnumber,
                 'maxdepth'      => $report->maxdepth,
             );
             if ($tabledata) {
@@ -192,7 +191,6 @@ class gradereport_user_external extends external_api {
                     'courseid'      => $course->id,
                     'userid'        => $currentuser->id,
                     'userfullname'  => fullname($currentuser),
-                    'useridnumber'  => $currentuser->idnumber,
                     'maxdepth'      => $report->maxdepth,
                 );
                 if ($tabledata) {
@@ -480,7 +478,6 @@ class gradereport_user_external extends external_api {
                             'courseid' => new external_value(PARAM_INT, 'course id'),
                             'userid'   => new external_value(PARAM_INT, 'user id'),
                             'userfullname' => new external_value(PARAM_TEXT, 'user fullname'),
-                            'useridnumber' => new external_value(PARAM_TEXT, 'user idnumber'),
                             'maxdepth'   => new external_value(PARAM_INT, 'table max depth (needed for printing it)'),
                             'gradeitems' => new external_multiple_structure(
                                 new external_single_structure(
@@ -491,7 +488,6 @@ class gradereport_user_external extends external_api {
                                         'itemmodule' => new external_value(PARAM_PLUGIN, 'Grade item module'),
                                         'iteminstance' => new external_value(PARAM_INT, 'Grade item instance'),
                                         'itemnumber' => new external_value(PARAM_INT, 'Grade item item number'),
-                                        'idnumber' => new external_value(PARAM_TEXT, 'Grade item idnumber'),
                                         'categoryid' => new external_value(PARAM_INT, 'Grade item category id'),
                                         'outcomeid' => new external_value(PARAM_INT, 'Outcome id'),
                                         'scaleid' => new external_value(PARAM_INT, 'Scale id'),

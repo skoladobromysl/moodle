@@ -44,7 +44,7 @@ class pgsql_native_recordset_testcase extends basic_testcase {
     /**
      * Creates a second db connection and a temp table with values in for testing.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         global $DB;
 
         parent::setUp();
@@ -87,7 +87,7 @@ class pgsql_native_recordset_testcase extends basic_testcase {
     /**
      * Gets rid of the second db connection.
      */
-    protected function tearDown(): void {
+    protected function tearDown() {
         if ($this->specialdb) {
             $table = new xmldb_table('silly_test_table');
             $this->specialdb->get_manager()->drop_table($table);
@@ -304,7 +304,7 @@ class pgsql_native_recordset_testcase extends basic_testcase {
             $transaction->rollback(new dml_transaction_exception('rollback please'));
             $this->fail('should not get here');
         } catch (dml_transaction_exception $e) {
-            $this->assertStringContainsString('rollback please', $e->getMessage());
+            $this->assertContains('rollback please', $e->getMessage());
         } finally {
 
             // Rollback should not kill our recordset.

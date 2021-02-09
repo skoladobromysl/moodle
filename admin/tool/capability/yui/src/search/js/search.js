@@ -52,13 +52,6 @@ SEARCH.prototype = {
      */
     button: null,
     /**
-     * The cancel button for the form.
-     * @property button
-     * @type Node
-     * @protected
-     */
-    cancel: null,
-    /**
      * The last search node if there is one.
      * If there is a last search node then the last search term will be persisted between requests.
      * @property lastsearch
@@ -81,27 +74,16 @@ SEARCH.prototype = {
         this.button = this.form.all('input[type=submit]');
         this.lastsearch = this.form.one('input[name=search]');
 
-        var div = Y.Node.create('<div id="capabilitysearchui" class="input-group simplesearchform mb-2"' +
-            'data-fieldtype="text"></div>'),
-            label = Y.Node.create('<label for="capabilitysearch"><span class="sr-only"' +
-                this.get('strsearch') + '</span></label>');
-        this.cancel = Y.Node.create('<a class="btn btn-clear d-none icon-no-margin">' +
-                '<i class="icon fa fa-times fa-fw " aria-hidden="true"></i>' +
-                '</a>');
-        this.input = Y.Node.create('<input type="text" class="form-control withclear" placeholder="' +
-            this.get('strsearch') + '"id="capabilitysearch" />');
+        var div = Y.Node.create('<div id="capabilitysearchui" data-fieldtype="text"></div>'),
+            label = Y.Node.create('<label for="capabilitysearch">' + this.get('strsearch') + '</label>');
+        this.input = Y.Node.create('<input type="text" id="capabilitysearch" />');
 
-        div.append(label).append(this.input).append(this.cancel);
+        div.append(label).append(this.input);
 
         this.select.insert(div, 'before');
 
         this.input.on('keyup', this.typed, this);
         this.select.on('change', this.validate, this);
-
-        this.cancel.on('click', function() {
-            this.input.set('value', '');
-            this.typed();
-        }, this);
 
         if (this.lastsearch) {
             this.input.set('value', this.lastsearch.get('value'));
@@ -148,11 +130,6 @@ SEARCH.prototype = {
             if (matching === 1) {
                 last.set('selected', true);
             }
-        }
-        if (search !== '') {
-            this.cancel.removeClass("d-none");
-        } else {
-            this.cancel.addClass("d-none");
         }
         this.validate();
     }

@@ -67,11 +67,4 @@ interface times_interface {
      * @return \DateTimeImmutable
      */
     public function get_modified_time();
-
-    /**
-     * Get the user midnight time.
-     *
-     * @return \DateTimeImmutable
-     */
-    public function get_usermidnight_time();
 }

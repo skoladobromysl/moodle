@@ -48,7 +48,7 @@ use core_competency\privacy\provider;
  */
 class core_competency_privacy_testcase extends provider_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         global $PAGE;
         $this->resetAfterTest();
 

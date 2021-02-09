@@ -406,8 +406,12 @@ switch ($mode) {
                     }
                     $count++;
 
-                    // Make sure they didn't answer it more than the max number of attempts.
-                    $essay = $lesson->get_last_attempt($try);
+                    // Make sure they didn't answer it more than the max number of attmepts
+                    if (count($try) > $lesson->maxattempts) {
+                        $essay = $try[$lesson->maxattempts-1];
+                    } else {
+                        $essay = end($try);
+                    }
 
                     // Start processing the attempt
                     $essayinfo = lesson_page_type_essay::extract_useranswer($essay->useranswer);

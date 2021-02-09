@@ -17,17 +17,17 @@
 .environmenttable {
     .warn {
         background-color: $state-warning-bg;
-        color: $warning;
+        color: $state-warning-text;
     }
 
     .error {
         background-color: $state-danger-bg;
-        color: $danger;
+        color: $state-danger-text;
     }
 
     .ok {
         background-color: $state-success-bg;
-        color: $success;
+        color: $state-success-text;
     }
 }
 
@@ -105,7 +105,7 @@
     text-align: left;
     margin-left: auto;
     margin-right: auto;
-    margin-top: $spacer;
+    margin-top: $spacer-y;
 }
 
 #page-admin-roles-define .topfields {
@@ -113,7 +113,7 @@
 }
 
 #page-admin-roles-define .capdefault {
-    background-color: $table-hover-bg;
+    background-color: $table-bg-hover;
 }
 
 #page-filter-manage .backlink,
@@ -484,7 +484,7 @@
 
         .uninstall {
             a {
-                color: $danger;
+                color: $state-danger-text;
             }
         }
 
@@ -603,7 +603,7 @@
 
 #core-cache-rescan-definitions,
 #core-cache-mode-mappings .edit-link,
-#core-cache-lock-additional-actions .new-instance {
+#core-cache-lock-summary .new-instance {
     margin-top: 0.5em;
     text-align: center;
 }
@@ -650,19 +650,5 @@
     .task-class {
         font-size: $font-size-sm;
         color: $gray-600;
-    }
-}
-
-.path-admin-tool-uploaduser {
-    .uuwarning {
-        background-color: $state-warning-bg;
-    }
-
-    .uuerror {
-        background-color: $state-danger-bg;
-    }
-
-    .uuinfo {
-        background-color: $state-success-bg;
     }
 }

@@ -43,7 +43,7 @@ class qbehaviour_deferredcbm_type_test extends qbehaviour_walkthrough_test_base 
     /** @var qbehaviour_deferredcbm_type */
     protected $behaviourtype;
 
-    public function setUp(): void {
+    public function setUp() {
         parent::setUp();
         $this->behaviourtype = question_engine::get_behaviour_type('deferredcbm');
     }
@@ -85,20 +85,20 @@ class qbehaviour_deferredcbm_type_test extends qbehaviour_walkthrough_test_base 
         $summarydata = $this->quba->get_summary_information(new question_display_options());
 
         // Verify.
-        $this->assertStringContainsString(get_string('breakdownbycertainty', 'qbehaviour_deferredcbm'),
+        $this->assertContains(get_string('breakdownbycertainty', 'qbehaviour_deferredcbm'),
                 $summarydata['qbehaviour_cbm_judgement_heading']['content']);
 
-        $this->assertStringContainsString('100%',
+        $this->assertContains('100%',
                 $summarydata['qbehaviour_cbm_judgement3']['content']);
-        $this->assertStringContainsString(get_string('judgementok', 'qbehaviour_deferredcbm'),
+        $this->assertContains(get_string('judgementok', 'qbehaviour_deferredcbm'),
                 $summarydata['qbehaviour_cbm_judgement3']['content']);
 
-        $this->assertStringContainsString('50%',
+        $this->assertContains('50%',
                 $summarydata['qbehaviour_cbm_judgement2']['content']);
-        $this->assertStringContainsString(get_string('slightlyoverconfident', 'qbehaviour_deferredcbm'),
+        $this->assertContains(get_string('slightlyoverconfident', 'qbehaviour_deferredcbm'),
                 $summarydata['qbehaviour_cbm_judgement2']['content']);
 
-        $this->assertStringContainsString(get_string('noquestions', 'qbehaviour_deferredcbm'),
+        $this->assertContains(get_string('noquestions', 'qbehaviour_deferredcbm'),
                 $summarydata['qbehaviour_cbm_judgement1']['content']);
     }
 
@@ -121,20 +121,20 @@ class qbehaviour_deferredcbm_type_test extends qbehaviour_walkthrough_test_base 
         $summarydata = $this->quba->get_summary_information(new question_display_options());
 
         // Verify.
-        $this->assertStringContainsString(get_string('breakdownbycertainty', 'qbehaviour_deferredcbm'),
+        $this->assertContains(get_string('breakdownbycertainty', 'qbehaviour_deferredcbm'),
                 $summarydata['qbehaviour_cbm_judgement_heading']['content']);
 
-        $this->assertStringContainsString('100%',
+        $this->assertContains('100%',
                 $summarydata['qbehaviour_cbm_judgement3']['content']);
-        $this->assertStringContainsString(get_string('judgementok', 'qbehaviour_deferredcbm'),
+        $this->assertContains(get_string('judgementok', 'qbehaviour_deferredcbm'),
                 $summarydata['qbehaviour_cbm_judgement3']['content']);
 
-        $this->assertStringContainsString('50%',
+        $this->assertContains('50%',
                 $summarydata['qbehaviour_cbm_judgement2']['content']);
-        $this->assertStringContainsString(get_string('slightlyoverconfident', 'qbehaviour_deferredcbm'),
+        $this->assertContains(get_string('slightlyoverconfident', 'qbehaviour_deferredcbm'),
                 $summarydata['qbehaviour_cbm_judgement2']['content']);
 
-        $this->assertStringContainsString(get_string('noquestions', 'qbehaviour_deferredcbm'),
+        $this->assertContains(get_string('noquestions', 'qbehaviour_deferredcbm'),
                 $summarydata['qbehaviour_cbm_judgement1']['content']);
     }
 

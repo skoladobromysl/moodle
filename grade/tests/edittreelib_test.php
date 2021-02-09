@@ -79,7 +79,7 @@ class core_grade_edittreelib_testcase extends advanced_testcase {
 
         $this->assertEquals(GRADE_TYPE_VALUE, $gradeitem->gradetype);
         $this->assertEquals(null, $gradeitem->scaleid);
-        $this->assertEqualsWithDelta(70.0, (float) $cell->text, 0.01, "Grade text is 70");
+        $this->assertEquals(70.0, (float) $cell->text, "Grade text is 70", 0.01);
 
         // Now change it to a scale.
         $instance = $assign->get_instance();

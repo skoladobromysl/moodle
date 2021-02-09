@@ -64,7 +64,7 @@ class post_statement_testcase extends externallib_advanced_testcase {
     /**
      * Setup test.
      */
-    public function setUp(): void {
+    public function setUp() {
         global $CFG;
         // We disable group actors on the test xapi_handler.
         $CFG->xapitestforcegroupactors = false;

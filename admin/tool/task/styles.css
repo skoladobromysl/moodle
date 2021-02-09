@@ -1,5 +1,4 @@
-#page-admin-tool-task-scheduledtasks .task-class,
-#page-admin-tool-task-runningtasks .task-class {
+#page-admin-tool-task-scheduledtasks .task-class {
     display: block;
     padding: 0 0.5em;
     color: #888;

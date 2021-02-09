@@ -608,46 +608,42 @@ class manager {
     }
 
     /**
-     * Get all tours for the current page URL.
+     * Get the first tour matching the current page URL.
      *
-     * @param   bool        $reset      Forcibly update the current tours
-     * @return  array
+     * @param   bool        $reset      Forcibly update the current tour
+     * @return  tour
      */
-    public static function get_current_tours($reset = false): array {
+    public static function get_current_tour($reset = false) {
         global $PAGE;
 
-        static $tours = false;
+        static $tour = false;
 
-        if ($tours === false || $reset) {
-            $tours = self::get_matching_tours($PAGE->url);
+        if ($tour === false || $reset) {
+            $tour = self::get_matching_tours($PAGE->url);
         }
 
-        return $tours;
+        return $tour;
     }
 
     /**
-     * Get all tours matching the specified URL.
+     * Get the first tour matching the specified URL.
      *
      * @param   moodle_url  $pageurl        The URL to match.
-     * @return  array
+     * @return  tour
      */
-    public static function get_matching_tours(\moodle_url $pageurl): array {
+    public static function get_matching_tours(\moodle_url $pageurl) {
         global $PAGE;
 
         $tours = cache::get_matching_tourdata($pageurl);
 
-        $matches = [];
-        if ($tours) {
-            $filters = helper::get_all_filters();
-            foreach ($tours as $record) {
-                $tour = tour::load_from_record($record);
-                if ($tour->is_enabled() && $tour->matches_all_filters($PAGE->context, $filters)) {
-                    $matches[] = $tour;
-                }
+        foreach ($tours as $record) {
+            $tour = tour::load_from_record($record);
+            if ($tour->is_enabled() && $tour->matches_all_filters($PAGE->context)) {
+                return $tour;
             }
         }
 
-        return $matches;
+        return null;
     }
 
     /**

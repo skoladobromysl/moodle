@@ -441,36 +441,28 @@ function wiki_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
     }
 }
 
-/**
- * Search for wiki
- *
- * @param stdClass $cm course module object
- * @param string $search searchword.
- * @param stdClass $subwiki Optional Subwiki.
- * @return Search wiki input form
- */
 function wiki_search_form($cm, $search = '', $subwiki = null) {
-    global $OUTPUT;
+    global $CFG, $OUTPUT;
 
-    $hiddenfields = [
-        (object) ['type' => 'hidden', 'name' => 'courseid', 'value' => $cm->course],
-        (object) ['type' => 'hidden', 'name' => 'cmid', 'value' => $cm->id],
-        (object) ['type' => 'hidden', 'name' => 'searchwikicontent', 'value' => 1],
-    ];
+    $output = '<div class="wikisearch">';
+    $output .= '<form method="post" action="' . $CFG->wwwroot . '/mod/wiki/search.php" style="display:inline">';
+    $output .= '<fieldset class="invisiblefieldset">';
+    $output .= '<legend class="accesshide">'. get_string('searchwikis', 'wiki') .'</legend>';
+    $output .= '<label class="accesshide" for="searchwiki">' . get_string("searchterms", "wiki") . '</label>';
+    $output .= '<input id="searchwiki" name="searchstring" type="text" size="18" value="' . s($search, true) . '" alt="search" />';
+    $output .= '<input name="courseid" type="hidden" value="' . $cm->course . '" />';
+    $output .= '<input name="cmid" type="hidden" value="' . $cm->id . '" />';
     if (!empty($subwiki->id)) {
-        $hiddenfields[] = (object) ['type' => 'hidden', 'name' => 'subwikiid', 'value' => $subwiki->id];
+        $output .= '<input name="subwikiid" type="hidden" value="' . $subwiki->id . '" />';
     }
-    $data = [
-        'action' => new moodle_url('/mod/wiki/search.php'),
-        'hiddenfields' => $hiddenfields,
-        'inputname' => 'searchstring',
-        'query' => s($search, true),
-        'searchstring' => get_string('searchwikis', 'wiki'),
-        'extraclasses' => 'mt-2'
-    ];
-    return $OUTPUT->render_from_template('core/search_input', $data);
-}
+    $output .= '<input name="searchwikicontent" type="hidden" value="1" />';
+    $output .= '<input value="' . get_string('searchwikis', 'wiki') . '" class="btn btn-secondary" type="submit" />';
+    $output .= '</fieldset>';
+    $output .= '</form>';
+    $output .= '</div>';
 
+    return $output;
+}
 function wiki_extend_navigation(navigation_node $navref, $course, $module, $cm) {
     global $CFG, $PAGE, $USER;
 

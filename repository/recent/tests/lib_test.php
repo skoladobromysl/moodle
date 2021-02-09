@@ -49,7 +49,7 @@ class repository_recent_lib_testcase extends advanced_testcase {
     /**
      * SetUp to create an repository instance.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         global $USER;
         $this->setAdminUser();
         $this->usercontext = context_user::instance($USER->id);

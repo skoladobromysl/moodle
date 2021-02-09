@@ -48,7 +48,7 @@ require_once($CFG->libdir . '/badgeslib.php');
  */
 class core_badges_privacy_testcase extends provider_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
     }
 

@@ -55,12 +55,13 @@ class core_update_checker_testcase extends advanced_testcase {
 
     /**
      * If there are no fetched data yet, the first cron should fetch them.
+     *
+     * @expectedException \core\update\testable_checker_cron_executed
      */
     public function test_cron_initial_fetch() {
         $provider = testable_checker::instance();
         $provider->fakerecentfetch = null;
         $provider->fakecurrenttimestamp = -1;
-        $this->expectException(\core\update\testable_checker_cron_executed::class);
         $provider->cron();
     }
 
@@ -77,12 +78,13 @@ class core_update_checker_testcase extends advanced_testcase {
 
     /**
      * If there is an outdated fetch, the cron execution is expected.
+     *
+     * @expectedException \core\update\testable_checker_cron_executed
      */
     public function test_cron_has_outdated_fetch() {
         $provider = testable_checker::instance();
         $provider->fakerecentfetch = time() - 49 * HOURSECS; // Fetched 49 hours ago.
         $provider->fakecurrenttimestamp = -1;
-        $this->expectException(\core\update\testable_checker_cron_executed::class);
         $provider->cron();
     }
 
@@ -146,7 +148,7 @@ class core_update_checker_testcase extends advanced_testcase {
         $old = array();
         $new = array();
         $cmp = $provider->compare_responses($old, $new);
-        $this->assertIsArray($cmp);
+        $this->assertInternalType('array', $cmp);
         $this->assertEmpty($cmp);
     }
 
@@ -163,7 +165,7 @@ class core_update_checker_testcase extends advanced_testcase {
             )
         );
         $cmp = $provider->compare_responses($old, $new);
-        $this->assertIsArray($cmp);
+        $this->assertInternalType('array', $cmp);
         $this->assertNotEmpty($cmp);
         $this->assertTrue(isset($cmp['core'][0]['version']));
         $this->assertEquals(2012060103, $cmp['core'][0]['version']);
@@ -189,7 +191,7 @@ class core_update_checker_testcase extends advanced_testcase {
             )
         );
         $cmp = $provider->compare_responses($old, $new);
-        $this->assertIsArray($cmp);
+        $this->assertInternalType('array', $cmp);
         $this->assertEmpty($cmp);
     }
 
@@ -222,7 +224,7 @@ class core_update_checker_testcase extends advanced_testcase {
             )
         );
         $cmp = $provider->compare_responses($old, $new);
-        $this->assertIsArray($cmp);
+        $this->assertInternalType('array', $cmp);
         $this->assertNotEmpty($cmp);
         $this->assertCount(1, $cmp);
         $this->assertCount(1, $cmp['core']);
@@ -250,19 +252,21 @@ class core_update_checker_testcase extends advanced_testcase {
             )
         );
         $cmp = $provider->compare_responses($old, $new);
-        $this->assertIsArray($cmp);
+        $this->assertInternalType('array', $cmp);
         $this->assertNotEmpty($cmp);
         $this->assertCount(1, $cmp);
         $this->assertCount(1, $cmp['mod_foo']);
         $this->assertEquals(2011010102, $cmp['mod_foo'][0]['version']);
     }
 
+    /**
+     * @expectedException \core\update\checker_exception
+     */
     public function test_compare_responses_invalid_format() {
         $provider = testable_checker::instance();
         $broken = array(
             'status' => 'ERROR' // No 'updates' key here.
         );
-        $this->expectException(\core\update\checker_exception::class);
         $cmp = $provider->compare_responses($broken, $broken);
     }
 

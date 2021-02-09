@@ -1853,7 +1853,7 @@ class core_plugin_manager {
             'enrol' => array(
                 'category', 'cohort', 'database', 'flatfile',
                 'guest', 'imsenterprise', 'ldap', 'lti', 'manual', 'meta', 'mnet',
-                'paypal', 'self', 'fee',
+                'paypal', 'self'
             ),
 
             'filter' => array(
@@ -1923,10 +1923,6 @@ class core_plugin_manager {
                 'quiz', 'resource', 'scorm', 'survey', 'url', 'wiki', 'workshop'
             ),
 
-            'paygw' => [
-                'paypal',
-            ],
-
             'plagiarism' => array(
             ),
 
@@ -1970,8 +1966,8 @@ class core_plugin_manager {
 
             'report' => array(
                 'backups', 'competency', 'completion', 'configlog', 'courseoverview', 'eventlist',
-                'infectedfiles', 'insights', 'log', 'loglive', 'outline', 'participation', 'progress',
-                'questioninstances', 'security', 'stats', 'status', 'performance', 'usersessions'
+                'insights', 'log', 'loglive', 'outline', 'participation', 'progress', 'questioninstances',
+                'security', 'stats', 'status', 'performance', 'usersessions'
             ),
 
             'repository' => array(

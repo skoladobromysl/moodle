@@ -36,7 +36,7 @@ class mod_resource_events_testcase extends advanced_testcase {
     /**
      * Setup is called before calling test case.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
 
         // Must be a non-guest user to create resources.

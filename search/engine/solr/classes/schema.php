@@ -60,11 +60,10 @@ class schema {
     /**
      * Constructor.
      *
-     * @param engine $engine Optional engine parameter, if not specified then one will be created
      * @throws \moodle_exception
      * @return void
      */
-    public function __construct(engine $engine = null) {
+    public function __construct() {
         if (!$this->config = get_config('search_solr')) {
             throw new \moodle_exception('missingconfig', 'search_solr');
         }
@@ -73,7 +72,7 @@ class schema {
             throw new \moodle_exception('missingconfig', 'search_solr');
         }
 
-        $this->engine = $engine ?? new engine();
+        $this->engine = new engine();
         $this->curl = $this->engine->get_curl_object();
 
         // HTTP headers.

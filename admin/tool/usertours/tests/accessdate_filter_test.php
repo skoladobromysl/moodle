@@ -36,7 +36,7 @@ use tool_usertours\local\filter\accessdate;
  */
 class tool_usertours_accessdate_filter_test extends advanced_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
     }
 

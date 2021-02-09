@@ -40,7 +40,7 @@ class webservice_test extends advanced_testcase {
     /**
      * Setup.
      */
-    public function setUp(): void {
+    public function setUp() {
         // Calling parent is good, always.
         parent::setUp();
 

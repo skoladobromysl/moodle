@@ -58,7 +58,7 @@ class tool_usertours_role_filter_testcase extends advanced_testcase {
      */
     protected $roles;
 
-    public function setUp(): void {
+    public function setUp() {
         global $DB;
 
         $this->resetAfterTest(true);

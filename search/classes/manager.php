@@ -190,18 +190,13 @@ class manager {
      * parameter provides a way to skip those checks on pages which are used frequently. It has
      * no effect if an instance has already been constructed in this request.
      *
-     * The $query parameter indicates that the page is used for queries rather than indexing. If
-     * configured, this will cause the query-only search engine to be used instead of the 'normal'
-     * one.
-     *
      * @see \core_search\engine::is_installed
      * @see \core_search\engine::is_server_ready
      * @param bool $fast Set to true when calling on a page that requires high performance
-     * @param bool $query Set true on a page that is used for querying
      * @throws \core_search\engine_exception
      * @return \core_search\manager
      */
-    public static function instance(bool $fast = false, bool $query = false) {
+    public static function instance($fast = false) {
         global $CFG;
 
         // One per request, this should be purged during testing.
@@ -213,7 +208,7 @@ class manager {
             throw new \core_search\engine_exception('enginenotselected', 'search');
         }
 
-        if (!$engine = static::search_engine_instance($query)) {
+        if (!$engine = static::search_engine_instance()) {
             throw new \core_search\engine_exception('enginenotfound', 'search', '', $CFG->searchengine);
         }
 
@@ -292,46 +287,17 @@ class manager {
     /**
      * Returns an instance of the search engine.
      *
-     * @param bool $query If true, gets the query-only search engine (where configured)
      * @return \core_search\engine
      */
-    public static function search_engine_instance(bool $query = false) {
+    public static function search_engine_instance() {
         global $CFG;
 
-        if ($query && $CFG->searchenginequeryonly) {
-            return self::search_engine_instance_from_setting($CFG->searchenginequeryonly);
-        } else {
-            return self::search_engine_instance_from_setting($CFG->searchengine);
-        }
-    }
-
-    /**
-     * Loads a search engine based on the name given in settings, which can optionally
-     * include '-alternate' to indicate that an alternate version should be used.
-     *
-     * @param string $setting
-     * @return engine|null
-     */
-    protected static function search_engine_instance_from_setting(string $setting): ?engine {
-        if (preg_match('~^(.*)-alternate$~', $setting, $matches)) {
-            $enginename = $matches[1];
-            $alternate = true;
-        } else {
-            $enginename = $setting;
-            $alternate = false;
-        }
-
-        $classname = '\\search_' . $enginename . '\\engine';
+        $classname = '\\search_' . $CFG->searchengine . '\\engine';
         if (!class_exists($classname)) {
-            return null;
+            return false;
         }
 
-        if ($alternate) {
-            return new $classname(true);
-        } else {
-            // Use the constructor with no parameters for compatibility.
-            return new $classname();
-        }
+        return new $classname();
     }
 
     /**
@@ -1186,20 +1152,8 @@ class manager {
                     $recordset, array($searcharea, 'get_document'), $options));
             $result = $this->engine->add_documents($iterator, $searcharea, $options);
             $recordset->close();
-            $batchinfo = '';
-            if (count($result) === 6) {
-                [$numrecords, $numdocs, $numdocsignored, $lastindexeddoc, $partial, $batches] = $result;
-                // Only show the batch count if we actually batched any requests.
-                if ($batches !== $numdocs + $numdocsignored) {
-                    $batchinfo = ' (' . $batches . ' batch' . ($batches === 1 ? '' : 'es') . ')';
-                }
-            } else if (count($result) === 5) {
-                // Backward compatibility for engines that don't return a batch count.
-                [$numrecords, $numdocs, $numdocsignored, $lastindexeddoc, $partial] = $result;
-                // Deprecated since Moodle 3.10 MDL-68690.
-                // TODO: MDL-68776 This will be deleted in Moodle 4.2.
-                debugging('engine::add_documents() should return $batches (5-value return is deprecated)',
-                        DEBUG_DEVELOPER);
+            if (count($result) === 5) {
+                list($numrecords, $numdocs, $numdocsignored, $lastindexeddoc, $partial) = $result;
             } else {
                 throw new coding_exception('engine::add_documents() should return $partial (4-value return is deprecated)');
             }
@@ -1214,7 +1168,7 @@ class manager {
                 }
 
                 $progress->output('Processed ' . $numrecords . ' records containing ' . $numdocs .
-                        ' documents' . $batchinfo . ', in ' . $elapsed . ' seconds' . $partialtext . '.', 1);
+                        ' documents, in ' . $elapsed . ' seconds' . $partialtext . '.', 1);
             } else {
                 $progress->output('No new documents to index.', 1);
             }
@@ -1351,20 +1305,8 @@ class manager {
 
             // Use this iterator to add documents.
             $result = $this->engine->add_documents($iterator, $searcharea, $options);
-            $batchinfo = '';
-            if (count($result) === 6) {
-                [$numrecords, $numdocs, $numdocsignored, $lastindexeddoc, $partial, $batches] = $result;
-                // Only show the batch count if we actually batched any requests.
-                if ($batches !== $numdocs + $numdocsignored) {
-                    $batchinfo = ' (' . $batches . ' batch' . ($batches === 1 ? '' : 'es') . ')';
-                }
-            } else if (count($result) === 5) {
-                // Backward compatibility for engines that don't return a batch count.
-                [$numrecords, $numdocs, $numdocsignored, $lastindexeddoc, $partial] = $result;
-                // Deprecated since Moodle 3.10 MDL-68690.
-                // TODO: MDL-68776 This will be deleted in Moodle 4.2 (as should the below bit).
-                debugging('engine::add_documents() should return $batches (5-value return is deprecated)',
-                        DEBUG_DEVELOPER);
+            if (count($result) === 5) {
+                list($numrecords, $numdocs, $numdocsignored, $lastindexeddoc, $partial) = $result;
             } else {
                 // Backward compatibility for engines that don't support partial adding.
                 list($numrecords, $numdocs, $numdocsignored, $lastindexeddoc) = $result;
@@ -1376,7 +1318,7 @@ class manager {
             if ($numdocs > 0) {
                 $elapsed = round((self::get_current_time() - $elapsed), 3);
                 $progress->output('Processed ' . $numrecords . ' records containing ' . $numdocs .
-                        ' documents' . $batchinfo . ', in ' . $elapsed . ' seconds' .
+                        ' documents, in ' . $elapsed . ' seconds' .
                         ($partial ? ' (not complete)' : '') . '.', 1);
             } else {
                 $progress->output('No documents to index.', 1);

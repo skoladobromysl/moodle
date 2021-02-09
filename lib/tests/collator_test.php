@@ -48,7 +48,7 @@ class core_collator_testcase extends advanced_testcase {
     /**
      * Prepares things for this test case.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         global $SESSION;
         if (isset($SESSION->lang)) {
             $this->initiallang = $SESSION->lang;
@@ -65,7 +65,7 @@ class core_collator_testcase extends advanced_testcase {
     /**
      * Cleans things up after this test case has run.
      */
-    protected function tearDown(): void {
+    protected function tearDown() {
         global $SESSION;
         parent::tearDown();
         if ($this->initiallang !== null) {

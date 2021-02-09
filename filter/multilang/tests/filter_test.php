@@ -34,7 +34,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 class filter_multilang_filter_testcase extends advanced_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         parent::setUp();
 
         $this->resetAfterTest(true);

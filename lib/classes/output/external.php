@@ -203,7 +203,6 @@ class external extends external_api {
     /**
      * Return a mapping of icon names to icons.
      *
-     * @deprecated since Moodle 3.10
      * @return array the mapping
      */
     public static function load_fontawesome_icon_map() {
@@ -219,15 +218,5 @@ class external extends external_api {
      */
     public static function load_fontawesome_icon_map_returns() {
         return load_fontawesome_map::execute_returns();
-    }
-
-    /**
-     * The `load_fontawesome_icon_map` function has been replaced with
-     * @see load_fontawesome_map::execute()
-     *
-     * @return bool
-     */
-    public static function load_fontawesome_icon_map_is_deprecated() {
-        return true;
     }
 }

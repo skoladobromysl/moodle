@@ -36,7 +36,7 @@ class ltiservice_memberships_privacy_provider_testcase extends provider_testcase
     /**
      * Basic setup for these tests.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
     }
 

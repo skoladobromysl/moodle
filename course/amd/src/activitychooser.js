@@ -259,7 +259,6 @@ const buildModal = (bodyPromise, footer) => {
         body: bodyPromise,
         footer: footer.customfootertemplate,
         large: true,
-        scrollable: false,
         templateContext: {
             classes: 'modchooser'
         }

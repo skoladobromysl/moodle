@@ -402,9 +402,10 @@ class core_calendar_raw_event_retrieval_strategy_testcase extends advanced_testc
         // Get all events.
         $events = $retrievalstrategy->get_raw_events([$user1->id, $user2->id]);
         $this->assertCount(2, $events);
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
                 ['User1 Event', 'User2 Event'],
-                array_column($events, 'name'));
+                array_column($events, 'name'),
+                '', 0.0, 10, true);
     }
 
     public function test_get_raw_events_for_groups_with_no_members() {
@@ -441,20 +442,10 @@ class core_calendar_raw_event_retrieval_strategy_testcase extends advanced_testc
         // Get group eventsl.
         $events = $retrievalstrategy->get_raw_events(null, [$group1->id, $group2->id]);
         $this->assertCount(2, $events);
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
                 ['Group 1 Event', 'Group 2 Event'],
-                array_column($events, 'name'));
-    }
-
-    /**
-     * Test retrieval strategy with empty filters.
-     * This covers a edge case not covered elsewhere to ensure its SQL is cross
-     * db compatible. The test is ensuring we don't get a DML Exception with
-     * the filters setup this way.
-     */
-    public function test_get_raw_events_with_empty_user_and_category_lists() {
-        $retrievalstrategy = new raw_event_retrieval_strategy;
-        $retrievalstrategy->get_raw_events([], null, null, []);
+                array_column($events, 'name'),
+                '', 0.0, 10, true);
     }
 
     /**

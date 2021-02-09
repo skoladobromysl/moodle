@@ -38,7 +38,7 @@ class repository_flickr_privacy_testcase extends provider_testcase {
     /**
      * Overriding setUp() function to always reset after tests.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
     }
 

@@ -141,9 +141,10 @@ $formdata = array(
 $exportform = new core_calendar_export_form(null, $formdata);
 $calendarurl = '';
 if ($data = $exportform->get_data()) {
+    $password = $DB->get_record('user', array('id' => $USER->id), 'password');
     $params = array();
     $params['userid']      = $USER->id;
-    $params['authtoken']   = calendar_get_export_token($USER);
+    $params['authtoken']   = sha1($USER->id . (isset($password->password) ? $password->password : '') . $CFG->calendar_exportsalt);
     $params['preset_what'] = $data->events['exportevents'];
     $params['preset_time'] = $data->period['timeperiod'];
 

@@ -484,7 +484,10 @@
             return toolTypeData;
         }).then(function(toolTypeData) {
             return templates.render('mod_lti/tool_card', toolTypeData);
-        }).then(function(html, js) {
+        }).then(function(renderResult) {
+            var html = renderResult[0];
+            var js = renderResult[1];
+
             templates.replaceNode(element, html, js);
             return;
         }).catch(function() {

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Upgrade scripts for Topics course format.
+ * Upgrade scripts for course format "Topics"
  *
  * @package    format_topics
  * @copyright  2017 Marina Glancy
@@ -25,9 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Upgrade script for Topics course format.
+ * Upgrade script for format_topics
  *
- * @param int|float $oldversion the version we are upgrading from
+ * @param int $oldversion the version we are upgrading from
  * @return bool result
  */
 function xmldb_format_topics_upgrade($oldversion) {

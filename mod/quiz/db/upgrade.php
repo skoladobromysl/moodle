@@ -29,8 +29,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param string $oldversion the version we are upgrading from.
  */
 function xmldb_quiz_upgrade($oldversion) {
-    global $CFG, $DB;
-    $dbman = $DB->get_manager();
+    global $CFG;
 
     // Automatically generated Moodle v3.5.0 release upgrade line.
     // Put any upgrade step following this.
@@ -46,22 +45,6 @@ function xmldb_quiz_upgrade($oldversion) {
 
     // Automatically generated Moodle v3.9.0 release upgrade line.
     // Put any upgrade step following this.
-
-    if ($oldversion < 2020061501) {
-
-        // Define field completionminattempts to be added to quiz.
-        $table = new xmldb_table('quiz');
-        $field = new xmldb_field('completionminattempts', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0',
-            'completionpass');
-
-        // Conditionally launch add field completionminattempts.
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
-
-        // Quiz savepoint reached.
-        upgrade_mod_savepoint(true, 2020061501, 'quiz');
-    }
 
     return true;
 }

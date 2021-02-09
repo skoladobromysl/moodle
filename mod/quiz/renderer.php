@@ -294,8 +294,10 @@ class mod_quiz_renderer extends plugin_renderer_base {
             $this->initialise_timer($timerstartvalue, $ispreview);
         }
 
-
-        return $this->output->render_from_template('mod_quiz/timer', (object)[]);
+        return html_writer::tag('div', get_string('timeleft', 'quiz') . ' ' .
+                html_writer::tag('span', '', array('id' => 'quiz-time-left')),
+                array('id' => 'quiz-timer', 'role' => 'timer',
+                    'aria-atomic' => 'true', 'aria-relevant' => 'text'));
     }
 
     /**
@@ -445,7 +447,6 @@ class mod_quiz_renderer extends plugin_renderer_base {
         $output = '';
         $output .= $this->header();
         $output .= $this->quiz_notices($messages);
-        $output .= $this->countdown_timer($attemptobj, time());
         $output .= $this->attempt_form($attemptobj, $page, $slots, $id, $nextpage);
         $output .= $this->footer();
         return $output;

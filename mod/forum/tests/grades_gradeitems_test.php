@@ -48,12 +48,8 @@ class gradeitems_test extends advanced_testcase {
         $mappings = component_gradeitems::get_itemname_mapping_for_component('mod_forum');
         $this->assertIsArray($mappings);
         $this->assertCount(2, $mappings);
-        $expected = [0 => 'rating', 1 => 'forum'];
-        // Verify each expected element exists and its value matches.
-        foreach ($expected as $key => $value) {
-            $this->assertArrayHasKey($key, $mappings);
-            $this->assertSame($value, $mappings[$key]);
-        }
+        $this->assertArraySubset([0 => 'rating'], $mappings);
+        $this->assertArraySubset([1 => 'forum'], $mappings);
     }
 
     /**

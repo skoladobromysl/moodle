@@ -30,7 +30,7 @@ class mod_folder_events_testcase extends advanced_testcase {
     /**
      * Tests set up.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
     }
 

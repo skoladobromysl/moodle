@@ -31,13 +31,13 @@ require_once($CFG->dirroot . '/rating/lib.php');
 
 class mod_forum_lib_testcase extends advanced_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         // We must clear the subscription caches. This has to be done both before each test, and after in case of other
         // tests using these functions.
         \mod_forum\subscriptions::reset_forum_cache();
     }
 
-    public function tearDown(): void {
+    public function tearDown() {
         // We must clear the subscription caches. This has to be done both before each test, and after in case of other
         // tests using these functions.
         \mod_forum\subscriptions::reset_forum_cache();

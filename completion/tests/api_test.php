@@ -38,7 +38,7 @@ class core_completion_api_testcase extends advanced_testcase {
     /**
      * Test setup.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
     }
 

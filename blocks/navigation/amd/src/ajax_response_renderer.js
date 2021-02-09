@@ -22,19 +22,7 @@
  * @copyright  2015 John Okely <john@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define([
-    'jquery',
-    'core/templates',
-    'core/notification',
-    'core/url',
-    'core/aria',
-], function(
-    $,
-    Templates,
-    Notification,
-    Url,
-    Aria
-) {
+define(['jquery', 'core/templates', 'core/notification', 'core/url'], function($, Templates, Notification, Url) {
 
     // Mappings for the different types of nodes coming from the navigation.
     // Copied from lib/navigationlib.php navigation_node constants.
@@ -55,7 +43,7 @@ define([
     function buildDOM(rootElement, nodes) {
         var ul = $('<ul></ul>');
         ul.attr('role', 'group');
-        Aria.hide(ul);
+        ul.attr('aria-hidden', true);
 
         $.each(nodes, function(index, node) {
             if (typeof node !== 'object') {
@@ -165,7 +153,7 @@ define([
                 var group = element.find('#' + item.attr('aria-owns'));
 
                 item.attr('aria-expanded', true);
-                Aria.unhide(group);
+                group.attr('aria-hidden', false);
             } else {
                 if (element.parent().hasClass('contains_branch')) {
                     element.parent().removeClass('contains_branch');

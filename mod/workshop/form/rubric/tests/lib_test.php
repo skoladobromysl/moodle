@@ -42,7 +42,7 @@ class workshopform_rubric_strategy_test extends advanced_testcase {
     /**
      * Setup testing environment
      */
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
@@ -79,7 +79,7 @@ class workshopform_rubric_strategy_test extends advanced_testcase {
 
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->strategy = null;
         $this->workshop = null;
         parent::tearDown();

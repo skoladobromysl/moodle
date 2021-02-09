@@ -46,7 +46,7 @@ class core_backup_automated_backup_testcase extends advanced_testcase {
      */
     protected $course;
 
-    protected function setUp(): void {
+    protected function setUp() {
         global $DB, $CFG;
 
         $this->resetAfterTest(true);

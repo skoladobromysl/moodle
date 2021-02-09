@@ -37,7 +37,7 @@ class mod_data_import_test extends advanced_testcase {
     /**
      * Set up function.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
 
         global $CFG;

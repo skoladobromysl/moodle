@@ -51,7 +51,7 @@ class block_comments_privacy_provider_testcase extends \core_privacy\tests\provi
     /** @var stdClass A test course. */
     protected $course2;
 
-    protected function setUp(): void {
+    protected function setUp() {
         global $DB;
 
         $this->resetAfterTest();
@@ -209,7 +209,7 @@ class block_comments_privacy_provider_testcase extends \core_privacy\tests\provi
         $this->assertCount(2, $contextlist);
 
         $contextids = $contextlist->get_contextids();
-        $this->assertEqualsCanonicalizing([$coursecontext1->id, $coursecontext2->id], $contextids);
+        $this->assertEquals([$coursecontext1->id, $coursecontext2->id], $contextids, '', 0.0, 10, true);
     }
 
     /**

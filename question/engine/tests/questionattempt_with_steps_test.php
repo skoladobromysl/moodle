@@ -44,7 +44,7 @@ class question_attempt_with_steps_test extends advanced_testcase {
     private $question;
     private $qa;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->question = test_question_maker::make_question('description');
         $this->qa = new testable_question_attempt($this->question, 0, null, 2);
         for ($i = 0; $i < 3; $i++) {
@@ -53,12 +53,14 @@ class question_attempt_with_steps_test extends advanced_testcase {
         }
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->qa = null;
     }
 
+    /**
+     * @expectedException moodle_exception
+     */
     public function test_get_step_before_start() {
-        $this->expectException(moodle_exception::class);
         $step = $this->qa->get_step(-1);
     }
 
@@ -72,8 +74,10 @@ class question_attempt_with_steps_test extends advanced_testcase {
         $this->assertEquals(2, $step->get_qt_var('i'));
     }
 
+    /**
+     * @expectedException moodle_exception
+     */
     public function test_get_step_past_end() {
-        $this->expectException(moodle_exception::class);
         $step = $this->qa->get_step(3);
     }
 

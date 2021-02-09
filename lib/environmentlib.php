@@ -368,7 +368,7 @@ function get_latest_version_available($version, $env_select) {
         return false;
     }
 /// First we look for exact version
-    if (in_array($version, $versions, true)) {
+    if (in_array($version, $versions)) {
         return $version;
     } else {
         $found_version = false;
@@ -416,7 +416,7 @@ function get_environment_for_version($version, $env_select) {
     }
 
 /// If the version requested is available
-    if (!in_array($version, $versions, true)) {
+    if (!in_array($version, $versions)) {
         return false;
     }
 
@@ -808,15 +808,8 @@ function environment_check_moodle($version, $env_select) {
     $release = get_config('', 'release');
     $current_version = normalize_version($release);
     if (strpos($release, 'dev') !== false) {
-        // When final version is required, dev is NOT enough so, at all effects
-        // it's like we are running the previous version.
-        $versionarr = explode('.', $current_version);
-        if (isset($versionarr[1]) and $versionarr[1] > 0) {
-            $versionarr[1]--;
-            $current_version = implode('.', $versionarr);
-        } else {
-            $current_version = $current_version - 0.1;
-        }
+        // when final version is required, dev is NOT enough!
+        $current_version = $current_version - 0.1;
     }
 
 /// And finally compare them, saving results

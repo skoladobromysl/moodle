@@ -294,8 +294,9 @@ class enrol_meta_privacy_testcase extends \core_privacy\tests\provider_testcase 
         $userlist = new \core_privacy\local\request\userlist($context, 'enrol_meta');
         \enrol_meta\privacy\provider::get_users_in_context($userlist);
 
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
                 [$user1->id, $user2->id],
-                $userlist->get_userids());
+                $userlist->get_userids(),
+                '', 0.0, 10, true);
     }
 }

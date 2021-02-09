@@ -40,11 +40,11 @@ class qtype_ddwtos_test extends question_testcase {
     /** @var qtype_ddwtos instance of the question type class to test. */
     protected $qtype;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->qtype = question_bank::get_qtype('ddwtos');;
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->qtype = null;
     }
 
@@ -157,7 +157,7 @@ class qtype_ddwtos_test extends question_testcase {
 
     public function test_get_random_guess_score() {
         $q = $this->get_test_question_data();
-        $this->assertEqualsWithDelta(0.5, $this->qtype->get_random_guess_score($q), 0.0000001);
+        $this->assertEquals(0.5, $this->qtype->get_random_guess_score($q), '', 0.0000001);
     }
 
     public function test_get_possible_responses() {

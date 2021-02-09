@@ -89,7 +89,6 @@ class qtype_essay_test_helper extends question_test_helper {
         $fromform->attachments = 0;
         $fromform->attachmentsrequired = 0;
         $fromform->filetypeslist = '';
-        $fromform->maxbytes = 0;
         $fromform->graderinfo = array('text' => '', 'format' => FORMAT_HTML);
         $fromform->responsetemplate = array('text' => '', 'format' => FORMAT_HTML);
 
@@ -141,7 +140,6 @@ class qtype_essay_test_helper extends question_test_helper {
         $fromform->attachments = 3;
         $fromform->attachmentsrequired = 0;
         $fromform->filetypeslist = '';
-        $fromform->maxbytes = 0;
         $fromform->graderinfo = array('text' => '', 'format' => FORMAT_HTML);
         $fromform->responsetemplate = array('text' => '', 'format' => FORMAT_HTML);
 
@@ -178,7 +176,6 @@ class qtype_essay_test_helper extends question_test_helper {
         $fromform->attachments = 0;
         $fromform->attachmentsrequired = 0;
         $fromform->filetypeslist = '';
-        $fromform->maxbytes = 0;
         $fromform->graderinfo = array('text' => '', 'format' => FORMAT_HTML);
         $fromform->responsetemplate = array('text' => '', 'format' => FORMAT_HTML);
 
@@ -212,7 +209,6 @@ class qtype_essay_test_helper extends question_test_helper {
         $q->attachments = 3;
         $q->attachmentsrequired = 1;
         $q->filetypeslist = '';
-        $q->maxbytes = 0;
         return $q;
     }
 

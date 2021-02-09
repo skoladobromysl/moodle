@@ -40,7 +40,7 @@ class filter_tex_testcase extends advanced_testcase {
 
     protected $filter;
 
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
         $this->resetAfterTest(true);
         $this->filter = new filter_tex(context_system::instance(), array());

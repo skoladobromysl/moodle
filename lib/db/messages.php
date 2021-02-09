@@ -86,9 +86,6 @@ $messageproviders = array (
         ),
     ),
 
-    // Course completed. Requires course completion configured at course level. It does not work with just activity progress.
-    'coursecompleted' => [],
-
     // Badge award notification to a badge recipient.
     'badgerecipientnotice' => array (
         'defaults' => array(
@@ -145,9 +142,4 @@ $messageproviders = array (
             'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDOFF,
         ),
     ],
-
-    // Infected files.
-    'infected' => array(
-        'capability'  => 'moodle/site:config',
-    ),
 );

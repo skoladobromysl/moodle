@@ -29,17 +29,13 @@
     Context variables required for this template:
     *
 
-    Example context (json):
-    {
-    }
-
 }}
 <div id="external-registration-page-container">
     <button id="cancel-external-registration" class="btn btn-danger">
         <span class="btn-text">{{#str}} cancel {{/str}}</span>
-        <span class="btn-loader">
+        <div class="btn-loader">
             {{> mod_lti/loader }}
-        </span>
+        </div>
     </button>
     <div id="external-registration-template-container"></div>
 </div>

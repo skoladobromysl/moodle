@@ -42,7 +42,7 @@ class question_attempt_iterator_test extends advanced_testcase {
     private $qas = array();
     private $iterator;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->quba = question_engine::make_questions_usage_by_activity('unit_test',
                 context_system::instance());
         $this->quba->set_preferred_behaviour('deferredfeedback');
@@ -56,7 +56,7 @@ class question_attempt_iterator_test extends advanced_testcase {
         $this->iterator = $this->quba->get_attempt_iterator();
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->quba = null;
         $this->iterator = null;
     }
@@ -87,8 +87,10 @@ class question_attempt_iterator_test extends advanced_testcase {
         $this->assertFalse(isset($this->iterator[3]));
     }
 
+    /**
+     * @expectedException moodle_exception
+     */
     public function test_offsetGet_before_start() {
-        $this->expectException(moodle_exception::class);
         $step = $this->iterator[0];
     }
 
@@ -100,18 +102,24 @@ class question_attempt_iterator_test extends advanced_testcase {
         $this->assertSame($this->qas[2], $this->iterator[2]);
     }
 
+    /**
+     * @expectedException moodle_exception
+     */
     public function test_offsetGet_past_end() {
-        $this->expectException(moodle_exception::class);
         $step = $this->iterator[3];
     }
 
+    /**
+     * @expectedException moodle_exception
+     */
     public function test_cannot_set() {
-        $this->expectException(moodle_exception::class);
         $this->iterator[0] = null;
     }
 
+    /**
+     * @expectedException moodle_exception
+     */
     public function test_cannot_unset() {
-        $this->expectException(moodle_exception::class);
         unset($this->iterator[2]);
     }
 }

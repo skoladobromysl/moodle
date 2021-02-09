@@ -49,7 +49,7 @@ class mod_workshop_events_testcase extends advanced_testcase {
     /**
      * Set up the testing environment.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
         $this->setAdminUser();
 
@@ -60,7 +60,7 @@ class mod_workshop_events_testcase extends advanced_testcase {
         $this->context = context_module::instance($this->cm->id);
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->workshop = null;
         $this->course = null;
         $this->cm = null;

@@ -44,7 +44,7 @@ class core_event_user_graded_testcase extends advanced_testcase {
     /**
      * Tests set up.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
     }
 

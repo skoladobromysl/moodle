@@ -40,7 +40,7 @@ class tool_mobile_privacy_testcase extends \core_privacy\tests\provider_testcase
     /**
      * Basic setup for these tests.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
     }
 

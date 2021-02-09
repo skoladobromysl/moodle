@@ -93,7 +93,8 @@ $string['modeinstructionfacetoface'] = 'Face to face';
 $string['modeinstructionblendedhybrid'] = 'Blended or hybrid';
 $string['modeinstructionfullyonline'] = 'Fully online';
 $string['modeloutputdir'] = 'Models output directory';
-$string['modeloutputdirwithdefaultinfo'] = 'Directory where prediction processors store all evaluation info. Useful for debugging and research. If empty, then {$a} will be used as default.';
+$string['modeloutputdirinfo'] = 'Directory where prediction processors store all evaluation info. Useful for debugging and research.';
+$string['modeloutputdirwithdefaultinfo'] = 'Directory where prediction processors store all evaluation info. Useful for debugging and research. If empty, then \'<strong>{$a}</strong>\' will be used as default.';
 $string['modeltimelimit'] = 'Analysis time limit per model';
 $string['modeltimelimitinfo'] = 'This setting limits the time each model spends analysing the site contents.';
 $string['neutral'] = 'Neutral';
@@ -156,6 +157,3 @@ $string['viewinsight'] = 'View insight';
 $string['viewinsightdetails'] = 'View insight details';
 $string['viewprediction'] = 'View prediction details';
 $string['washelpful'] = 'Was this helpful?';
-
-// Deprecated since Moodle 3.10.
-$string['modeloutputdirinfo'] = 'Directory where prediction processors store all evaluation info. Useful for debugging and research.';

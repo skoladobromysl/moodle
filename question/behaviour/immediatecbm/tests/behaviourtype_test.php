@@ -42,7 +42,7 @@ class qbehaviour_immediatecbm_type_test extends qbehaviour_walkthrough_test_base
     /** @var qbehaviour_immediatecbm_type */
     protected $behaviourtype;
 
-    public function setUp(): void {
+    public function setUp() {
         parent::setUp();
         $this->behaviourtype = question_engine::get_behaviour_type('immediatecbm');
     }

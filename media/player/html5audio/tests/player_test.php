@@ -36,7 +36,7 @@ class media_html5audio_testcase extends advanced_testcase {
     /**
      * Pre-test setup. Preserves $CFG.
      */
-    public function setUp(): void {
+    public function setUp() {
         parent::setUp();
 
         // Reset $CFG and $SERVER.

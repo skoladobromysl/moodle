@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 class component_favourite_service_testcase extends advanced_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
     }
 

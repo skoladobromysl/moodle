@@ -67,7 +67,7 @@ abstract class database_driver_testcase extends base_testcase {
         $this->setRunTestInSeparateProcess(false);
     }
 
-    public static function setUpBeforeClass(): void {
+    public static function setUpBeforeClass() {
         global $CFG;
         parent::setUpBeforeClass();
 
@@ -101,7 +101,7 @@ abstract class database_driver_testcase extends base_testcase {
         self::$extradb = $d;
     }
 
-    protected function setUp(): void {
+    protected function setUp() {
         global $DB;
         parent::setUp();
 
@@ -112,7 +112,7 @@ abstract class database_driver_testcase extends base_testcase {
         }
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         // delete all test tables
         $dbman = $this->tdb->get_manager();
         $tables = $this->tdb->get_tables(false);
@@ -125,7 +125,7 @@ abstract class database_driver_testcase extends base_testcase {
         parent::tearDown();
     }
 
-    public static function tearDownAfterClass(): void {
+    public static function tearDownAfterClass() {
         if (self::$extradb) {
             self::$extradb->dispose();
             self::$extradb = null;

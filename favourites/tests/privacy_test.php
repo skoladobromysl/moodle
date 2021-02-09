@@ -37,7 +37,7 @@ use \core_privacy\local\request\transform;
  */
 class privacy_test extends provider_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
     }
 
@@ -164,7 +164,7 @@ class privacy_test extends provider_testcase {
             $user1->id,
             $user2->id
         ];
-        $this->assertEqualsCanonicalizing($expected, $userlist->get_userids());
+        $this->assertEquals($expected, $userlist->get_userids(), '', 0.0, 10, true);
 
         // Ask the favourites privacy api to export userids for favourites of the type we just created, in the user1 context.
         $userlist = new \core_privacy\local\request\userlist($user1context, 'core_course');

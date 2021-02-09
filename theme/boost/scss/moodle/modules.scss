@@ -17,12 +17,6 @@ select {
     }
 }
 
-.path-mod-choice {
-    .choices .option label {
-        vertical-align: top;
-    }
-}
-
 .path-mod-feedback .feedback_form .col-form-label {
     display: block !important; /* stylelint-disable-line declaration-no-important */
 }
@@ -967,6 +961,10 @@ $grading-content-show-content-button-padding-left: calc(#{map-get($spacers, 2) *
     margin-left: 4px;
 }
 
+.ie .row-fluid .desktop-first-column {
+    margin-left: 0;
+}
+
 .langmenu form {
     margin: 0;
 }
@@ -1045,7 +1043,7 @@ div#dock {
         }
 
         > tbody > tr:nth-of-type(even) {
-            background-color: $table-accent-bg;
+            background-color: $table-bg-accent;
         }
 
         .rblock label {
@@ -1183,8 +1181,8 @@ div#dock {
 
     span.qnbutton {
         cursor: default;
-        background-color: $input-disabled-bg;
-        color: $gray-700;
+        background-color: $input-bg-disabled;
+        color: $gray;
     }
 
     a.qnbutton:hover,
@@ -1230,28 +1228,28 @@ div#dock {
 
     .qnbutton.correct .trafficlight {
         background-image: url([[pix:theme|mod/quiz/checkmark]]);
-        background-color: $success;
+        background-color: $state-success-text;
     }
 
     .qnbutton.blocked .trafficlight {
         background-image: url([[pix:core|t/locked]]);
-        background-color: $input-disabled-bg;
+        background-color: $input-bg-disabled;
     }
 
     .qnbutton.notanswered .trafficlight,
     .qnbutton.incorrect .trafficlight {
-        background-color: $danger;
+        background-color: $state-danger-text;
     }
 
     .qnbutton.partiallycorrect .trafficlight {
         background-image: url([[pix:theme|mod/quiz/whitecircle]]);
-        background-color: $warning;
+        background-color: $state-warning-text;
     }
 
     .qnbutton.complete .trafficlight,
     .qnbutton.answersaved .trafficlight,
     .qnbutton.requiresgrading .trafficlight {
-        background-color: $gray-600;
+        background-color: $gray-light;
     }
 }
 
@@ -1263,34 +1261,6 @@ div#dock {
 #page-mod-quiz-edit ul.slots li.section li.activity .instancemaxmarkcontainer {
     padding: 0;
     margin: 0 0.4em;
-}
-
-/* Countdown timer. */
-#page-mod-quiz-attempt #region-main {
-    overflow-x: inherit;
-}
-
-#quiz-timer-wrapper {
-    display: none;
-    position: sticky;
-    justify-content: end;
-    top: $navbar-height + 5px;
-    z-index: $zindex-sticky;
-    #quiz-timer {
-        border: $border-width solid $red;
-        background-color: $white;
-    }
-}
-.pagelayout-embedded #quiz-timer-wrapper {
-    top: 5px;
-}
-
-@for $i from 0 through 16 {
-    #quiz-timer-wrapper #quiz-timer.timeleft#{$i} {
-        $bg: lighten($red, ($i * 3%));
-        background-color: $bg;
-        color: color-yiq($bg);
-    }
 }
 
 // Assign.

@@ -44,7 +44,7 @@ class mod_wiki_events_testcase extends advanced_testcase {
     /**
      * Setup test data.
      */
-    public function setUp(): void {
+    public function setUp() {
         global $DB;
 
         $this->resetAfterTest();

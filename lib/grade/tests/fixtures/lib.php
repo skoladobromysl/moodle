@@ -49,7 +49,7 @@ abstract class grade_base_testcase extends advanced_testcase {
     protected $courseid;
     protected $userid;
 
-    protected function setUp(): void {
+    protected function setUp() {
         global $CFG;
         parent::setup();
 

@@ -43,7 +43,7 @@ class mod_wiki_search_testcase extends advanced_testcase {
      */
     protected $wikicollabpageareaid = null;
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
         $this->setAdminUser();
         set_config('enableglobalsearch', true);

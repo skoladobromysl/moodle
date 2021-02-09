@@ -38,17 +38,17 @@ if ($unrecognized) {
 }
 
 // If necessary add files that should be ignored - such as in 3rd party plugins.
-$ignorelist = array();
+$blacklist = array();
 $path = $options['path'];
 if (!file_exists($path)) {
     cli_error("Invalid path $path");
 }
 
 if ($options['ie9fix']) {
-    core_admin_recurse_svgs($path, '', 'core_admin_svgtool_ie9fix', $ignorelist);
+    core_admin_recurse_svgs($path, '', 'core_admin_svgtool_ie9fix', $blacklist);
 
 } else if ($options['noaspectratio']) {
-    core_admin_recurse_svgs($path, '', 'core_admin_svgtool_noaspectratio', $ignorelist);
+    core_admin_recurse_svgs($path, '', 'core_admin_svgtool_noaspectratio', $blacklist);
 
 } else {
     $help =
@@ -153,9 +153,9 @@ function core_admin_svgtool_noaspectratio($file) {
  * @param string $base
  * @param string $sub
  * @param string $filecallback
- * @param array $ignorelist List of files to be ignored and skipped.
+ * @param array $blacklist
  */
-function core_admin_recurse_svgs($base, $sub, $filecallback, $ignorelist) {
+function core_admin_recurse_svgs($base, $sub, $filecallback, $blacklist) {
     if (is_dir("$base/$sub")) {
         $items = new DirectoryIterator("$base/$sub");
         foreach ($items as $item) {
@@ -163,7 +163,7 @@ function core_admin_recurse_svgs($base, $sub, $filecallback, $ignorelist) {
                 continue;
             }
             $file = $item->getFilename();
-            core_admin_recurse_svgs("$base/$sub", $file, $filecallback, $ignorelist);
+            core_admin_recurse_svgs("$base/$sub", $file, $filecallback, $blacklist);
         }
         unset($item);
         unset($items);
@@ -174,7 +174,7 @@ function core_admin_recurse_svgs($base, $sub, $filecallback, $ignorelist) {
             return;
         }
         $file = realpath("$base/$sub");
-        if (in_array($file, $ignorelist)) {
+        if (in_array($file, $blacklist)) {
             return;
         }
         $filecallback($file);

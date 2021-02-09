@@ -38,7 +38,7 @@ class repository_onedrive_privacy_testcase extends \core_privacy\tests\provider_
     /**
      * Overriding setUp() function to always reset after tests.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
     }
 

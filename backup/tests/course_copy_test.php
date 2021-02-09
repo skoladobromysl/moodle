@@ -66,7 +66,7 @@ class core_backup_course_copy_testcase extends advanced_testcase {
     /**
      * Set up tasks for all tests.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         global $DB, $CFG, $USER;
 
         $this->resetAfterTest(true);

@@ -222,7 +222,7 @@ class core_question_privacy_provider_testcase extends \core_privacy\tests\provid
                 $expectedcontext->id,
                 $otherexpectedcontext->id,
             ];
-        $this->assertEqualsCanonicalizing($expectedcontexts, $contextlist->get_contextids(), 'Contexts not equal');
+        $this->assertEquals($expectedcontexts, $contextlist->get_contextids(), 'Contexts not equal', 0.0, 10, true);
 
         // Run the export_user_Data as the test user.
         $this->setUser($user);
@@ -460,9 +460,10 @@ class core_question_privacy_provider_testcase extends \core_privacy\tests\provid
 
         // User1 has created questions and user3 has edited them.
         $this->assertCount(2, $userlist);
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
                 [$user1->id, $user3->id],
-                $userlist->get_userids());
+                $userlist->get_userids(),
+                '', 0.0, 10, true);
     }
 
     /**

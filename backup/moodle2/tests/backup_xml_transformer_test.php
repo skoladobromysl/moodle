@@ -42,7 +42,7 @@ class backup_xml_transformer_testcase extends advanced_testcase {
     /**
      * Initial set up.
      */
-    public function setUp(): void {
+    public function setUp() {
         parent::setUp();
 
         $this->resetAfterTest(true);

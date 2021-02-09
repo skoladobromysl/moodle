@@ -61,15 +61,4 @@ if ($attemptobj->is_finished()) {
 
 $attemptobj->process_auto_save($timenow);
 $transaction->allow_commit();
-
-// Calculate time remaining.
-$timeleft = $attemptobj->get_time_left_display($timenow);
-
-// Build response, only returning timeleft if quiz in-progress
-// has a time limit.
-$r = new stdClass();
-$r->status = "OK";
-if ($timeleft !== false) {
-    $r->timeleft = $timeleft;
-}
-echo json_encode($r);
+echo 'OK';

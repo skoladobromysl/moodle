@@ -86,7 +86,7 @@ class mod_assign_base_testcase extends advanced_testcase {
     /**
      * Setup function - we will create a course and add an assign instance to it.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         global $DB;
 
         $this->resetAfterTest(true);

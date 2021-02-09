@@ -58,10 +58,10 @@ class test_response_answer_comparer implements question_response_answer_comparer
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class question_first_matching_answer_grading_strategy_testcase extends advanced_testcase {
-    protected function setUp(): void {
+    protected function setUp() {
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
     }
 
     public function test_no_answers_gives_null() {

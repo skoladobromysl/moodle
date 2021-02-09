@@ -19,13 +19,13 @@
         width: 50%;
         display: inline-block;
         float: left;
-        padding: $table-cell-padding-sm;
+        padding: $table-sm-cell-padding;
     }
     .normal_setting {
         width: 50%;
         display: inline-block;
         float: left;
-        padding: $table-cell-padding-sm;
+        padding: $table-sm-cell-padding;
     }
 }
 
@@ -48,7 +48,7 @@
     .grouped_settings {
         /* Striped rows like a table */
         &:nth-of-type(odd) {
-            background-color: $table-accent-bg;
+            background-color: $table-bg-accent;
         }
         &:nth-of-type(even) {
             background-color: $card-bg;
@@ -114,13 +114,13 @@
 }
 
 .path-backup .notification.dependencies_enforced {
-    color: $danger;
+    color: $state-danger-text;
     font-weight: bold;
 }
 
 .path-backup .backup_progress {
-    margin-top: $spacer;
-    margin-bottom: $spacer;
+    margin-top: $spacer-y;
+    margin-bottom: $spacer-y;
 
     .backup_stage {
         color: $text-muted;

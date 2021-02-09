@@ -41,7 +41,7 @@ class webservice_xmlrpc_test extends advanced_testcase {
     /**
      * Setup.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
 
         // All tests require xmlrpc. Skip tests, if xmlrpc is not installed.

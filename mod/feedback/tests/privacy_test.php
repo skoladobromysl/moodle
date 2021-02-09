@@ -46,7 +46,7 @@ require_once($CFG->dirroot . '/mod/feedback/lib.php');
  */
 class mod_feedback_privacy_testcase extends provider_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
     }
 

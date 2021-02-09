@@ -51,7 +51,7 @@ class tool_policy_privacy_provider_testcase extends \core_privacy\tests\provider
     /**
      * Setup function. Will create a user.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         $this->resetAfterTest();
 
         $generator = $this->getDataGenerator();
@@ -274,9 +274,13 @@ class tool_policy_privacy_provider_testcase extends \core_privacy\tests\provider
         // Request export for the manager.
         $contextlist = provider::get_contexts_for_userid($this->manager->id);
         $this->assertCount(3, $contextlist);
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
             [$managercontext->id, $usercontext->id, $systemcontext->id],
-            $contextlist->get_contextids()
+            $contextlist->get_contextids(),
+            '',
+            0.0,
+            1,
+            true
         );
 
         $approvedcontextlist = new approved_contextlist($this->user, 'tool_policy', [$usercontext->id]);
@@ -328,7 +332,7 @@ class tool_policy_privacy_provider_testcase extends \core_privacy\tests\provider
         // Agree to the policies for oneself.
         $contextlist = provider::get_contexts_for_userid($this->manager->id);
         $this->assertCount(2, $contextlist);
-        $this->assertEqualsCanonicalizing([$managercontext->id, $systemcontext->id], $contextlist->get_contextids());
+        $this->assertEquals([$managercontext->id, $systemcontext->id], $contextlist->get_contextids(), '', 0.0, 1, true);
 
         $approvedcontextlist = new approved_contextlist($this->manager, 'tool_policy', $contextlist->get_contextids());
         provider::export_user_data($approvedcontextlist);

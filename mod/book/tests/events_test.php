@@ -36,7 +36,7 @@ global $CFG;
  */
 class mod_book_events_testcase extends advanced_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
     }
 

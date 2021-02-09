@@ -175,7 +175,7 @@ class tool_uploadcourse_helper {
      *
      * The result is cached for faster execution.
      *
-     * @return enrol_plugin[]
+     * @return array
      */
     public static function get_enrolment_plugins() {
         $cache = cache::make('tool_uploadcourse', 'helper');

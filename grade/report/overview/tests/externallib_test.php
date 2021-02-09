@@ -42,7 +42,7 @@ class gradereport_overview_externallib_testcase extends externallib_advanced_tes
     /**
      * Set up for every test
      */
-    public function setUp(): void {
+    public function setUp() {
         global $DB;
         $this->resetAfterTest(true);
 

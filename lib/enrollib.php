@@ -1173,6 +1173,7 @@ function enrol_selfenrol_available($courseid) {
             continue;
         }
         if ($instance->enrol === 'guest') {
+            // blacklist known temporary guest plugins
             continue;
         }
         if ($plugins[$instance->enrol]->show_enrolme_link($instance)) {

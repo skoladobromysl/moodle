@@ -50,7 +50,7 @@ class mod_choice_events_testcase extends advanced_testcase {
     /**
      * Setup often used objects for the following tests.
      */
-    protected function setUp(): void {
+    protected function setup() {
         global $DB;
 
         $this->resetAfterTest();
@@ -168,6 +168,8 @@ class mod_choice_events_testcase extends advanced_testcase {
 
     /**
      * Test custom validations.
+     *
+     * @expectedException coding_exception
      */
     public function test_answer_created_other_exception() {
         // Generate user data.
@@ -181,7 +183,6 @@ class mod_choice_events_testcase extends advanced_testcase {
         $eventdata['other'] = array();
 
         // Make sure content identifier is always set.
-        $this->expectException(coding_exception::class);
         $event = \mod_choice\event\answer_created::create($eventdata);
         $event->trigger();
         $this->assertEventContextNotUsed($event);

@@ -37,7 +37,7 @@ class backup_dbops_testcase extends advanced_testcase {
     protected $courseid;  // course id used for testing
     protected $userid;      // user record used for testing
 
-    protected function setUp(): void {
+    protected function setUp() {
         global $DB, $CFG;
         parent::setUp();
 

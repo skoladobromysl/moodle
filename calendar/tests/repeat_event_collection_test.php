@@ -201,8 +201,7 @@ class core_calendar_repeat_event_collection_event_test_factory implements event_
                 (new \DateTimeImmutable())->setTimestamp($dbrow->timestart),
                 (new \DateTimeImmutable())->setTimestamp($dbrow->timestart + $dbrow->timeduration),
                 (new \DateTimeImmutable())->setTimestamp($dbrow->timesort ? $dbrow->timesort : $dbrow->timestart),
-                (new \DateTimeImmutable())->setTimestamp($dbrow->timemodified),
-                (new \DateTimeImmutable())->setTimestamp(usergetmidnight($dbrow->timesort))
+                (new \DateTimeImmutable())->setTimestamp($dbrow->timemodified)
             ),
             !empty($dbrow->visible),
             new std_proxy($dbrow->subscriptionid, $identity),

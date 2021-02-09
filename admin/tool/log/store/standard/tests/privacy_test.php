@@ -47,7 +47,7 @@ require_once(__DIR__ . '/fixtures/event.php');
  */
 class logstore_standard_privacy_testcase extends provider_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
         $this->preventResetByRollback(); // Logging waits till the transaction gets committed.
     }

@@ -45,7 +45,7 @@ class repository_nextcloud_lib_testcase extends advanced_testcase {
     /**
      * SetUp to create an repository instance.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         $this->resetAfterTest(true);
 
         // Admin is neccessary to create api and issuer objects.

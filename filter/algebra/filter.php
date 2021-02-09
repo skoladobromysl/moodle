@@ -227,8 +227,7 @@ class filter_algebra extends moodle_text_filter {
                   $texexp = preg_replace('/\\\int\\\left\((.+?),(.+?),(.+?)\\\right\)/s','\int_'. "{\$2}^{\$3}\$1 ",$texexp);
                   $texexp = preg_replace('/\\\int\\\left\((.+?d[a-z])\\\right\)/s','\int '. "\$1 ",$texexp);
                   $texexp = preg_replace('/\\\lim\\\left\((.+?),(.+?),(.+?)\\\right\)/s','\lim_'. "{\$2\\to \$3}\$1 ",$texexp);
-                  // Remove a forbidden keyword.
-                  $texexp = str_replace('\mbox', '', $texexp);
+                  $texexp = str_replace('\mbox', '', $texexp); // now blacklisted in tex, sorry
                   $texcache = new stdClass();
                   $texcache->filter = 'algebra';
                   $texcache->version = 1;

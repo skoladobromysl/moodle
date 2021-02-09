@@ -38,7 +38,7 @@ class core_calendar_lib_testcase extends advanced_testcase {
     /**
      * Tests set up
      */
-    protected function setUp(): void {
+    protected function setUp() {
         $this->resetAfterTest();
     }
 
@@ -827,9 +827,10 @@ class core_calendar_lib_testcase extends advanced_testcase {
         $defaultcourses = calendar_get_default_courses(null, '*', false, $users[0]->id);
         list($courseids, $groupids, $userid) = calendar_set_filters($defaultcourses);
 
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
                 [$courses[0]->id, $courses[1]->id, $courses[2]->id, SITEID],
-                array_values($courseids));
+                array_values($courseids),
+                '', 0.0, 10, true);
         $this->assertFalse($groupids);
         $this->assertFalse($userid);
     }
@@ -852,9 +853,10 @@ class core_calendar_lib_testcase extends advanced_testcase {
         $defaultcourses = calendar_get_default_courses(null, '*', false, $users[0]->id);
         list($courseids, $groupids, $userid) = calendar_set_filters($defaultcourses, false, $users[0]);
 
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
                 [$courses[0]->id, $courses[1]->id, $courses[2]->id, SITEID],
-                array_values($courseids));
+                array_values($courseids),
+                '', 0.0, 10, true);
         $this->assertEquals(array($coursegroups[$courses[0]->id][0]->id), $groupids);
         $this->assertEquals($users[0]->id, $userid);
 
@@ -871,7 +873,8 @@ class core_calendar_lib_testcase extends advanced_testcase {
         $this->setUser($users[0]);
         $defaultcourses = calendar_get_default_courses(null, '*', false, $users[0]->id);
         list($courseids, $groupids, $userid) = calendar_set_filters($defaultcourses, false);
-        $this->assertEqualsCanonicalizing([$courses[0]->id, $courses[1]->id, $courses[2]->id, SITEID], array_values($courseids));
+        $this->assertEquals([$courses[0]->id, $courses[1]->id, $courses[2]->id, SITEID], array_values($courseids), '', 0.0, 10,
+                true);
         $this->assertEquals(array($coursegroups[$courses[0]->id][0]->id), $groupids);
         $this->assertEquals($users[0]->id, $userid);
     }
@@ -959,37 +962,5 @@ class core_calendar_lib_testcase extends advanced_testcase {
         $this->assertFalse(calendar_view_event_allowed($caleventmanual));
         // Viewing as someone not enrolled in a course with guest access on.
         $this->assertTrue(calendar_view_event_allowed($caleventguest));
-    }
-
-    /**
-     *  Test for calendar_get_export_token for current user.
-     */
-    public function test_calendar_get_export_token_for_current_user() {
-        global $USER, $DB, $CFG;
-
-        $this->setAdminUser();
-
-        // Get my token.
-        $authtoken = calendar_get_export_token($USER);
-        $expected = sha1($USER->id . $DB->get_field('user', 'password', ['id' => $USER->id]) . $CFG->calendar_exportsalt);
-
-        $this->assertEquals($expected, $authtoken);
-    }
-
-    /**
-     *  Test for calendar_get_export_token for another user.
-     */
-    public function test_calendar_get_export_token_for_another_user() {
-        global $CFG;
-
-        // Get any user token.
-        $generator = $this->getDataGenerator();
-        $user = $generator->create_user();
-
-        // Get other user token.
-        $authtoken = calendar_get_export_token($user);
-        $expected = sha1($user->id . $user->password . $CFG->calendar_exportsalt);
-
-        $this->assertEquals($expected, $authtoken);
     }
 }

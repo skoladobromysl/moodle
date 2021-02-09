@@ -328,9 +328,9 @@ class MoodleQuickForm_filemanager extends HTML_QuickForm_element implements temp
         }
 
         $filetypesutil = new \core_form\filetypes_util();
-        $allowlist = $filetypesutil->normalize_file_types($this->_options['accepted_types']);
+        $whitelist = $filetypesutil->normalize_file_types($this->_options['accepted_types']);
 
-        if (empty($allowlist) || $allowlist === ['*']) {
+        if (empty($whitelist) || $whitelist === ['*']) {
             // Any file type is allowed, nothing to check here.
             return;
         }
@@ -344,14 +344,14 @@ class MoodleQuickForm_filemanager extends HTML_QuickForm_element implements temp
         }
 
         foreach ($draftfiles as $file) {
-            if (!$filetypesutil->is_allowed_file_type($file->filename, $allowlist)) {
+            if (!$filetypesutil->is_allowed_file_type($file->filename, $whitelist)) {
                 $wrongfiles[] = $file->filename;
             }
         }
 
         if ($wrongfiles) {
             $a = array(
-                'allowlist' => implode(', ', $allowlist),
+                'whitelist' => implode(', ', $whitelist),
                 'wrongfiles' => implode(', ', $wrongfiles),
             );
             return get_string('err_wrongfileextension', 'core_form', $a);

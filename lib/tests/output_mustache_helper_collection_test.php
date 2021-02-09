@@ -30,94 +30,94 @@ use core\output\mustache_helper_collection;
  */
 class core_output_mustache_helper_collection_testcase extends advanced_testcase {
     /**
-     * Test cases to confirm that disallowed helpers are stripped from the source
+     * Test cases to confirm that blacklisted helpers are stripped from the source
      * text by the helper before being passed to other another helper. This prevents
      * nested calls to helpers.
      */
-    public function get_strip_disallowed_helpers_testcases() {
+    public function get_strip_blacklisted_helpers_testcases() {
         return [
-            'no disallowed' => [
-                'disallowed' => [],
+            'no blacklist' => [
+                'blacklist' => [],
                 'input' => 'core, move, {{#js}} some nasty JS {{/js}}',
                 'expected' => 'core, move, {{#js}} some nasty JS {{/js}}'
             ],
-            'disallowed no match' => [
-                'disallowed' => ['foo'],
+            'blacklist no match' => [
+                'blacklist' => ['foo'],
                 'input' => 'core, move, {{#js}} some nasty JS {{/js}}',
                 'expected' => 'core, move, {{#js}} some nasty JS {{/js}}'
             ],
-            'disallowed partial match 1' => [
-                'disallowed' => ['js'],
+            'blacklist partial match 1' => [
+                'blacklist' => ['js'],
                 'input' => 'core, move, {{#json}} some nasty JS {{/json}}',
                 'expected' => 'core, move, {{#json}} some nasty JS {{/json}}'
             ],
-            'disallowed partial match 2' => [
-                'disallowed' => ['js'],
+            'blacklist partial match 2' => [
+                'blacklist' => ['js'],
                 'input' => 'core, move, {{#onjs}} some nasty JS {{/onjs}}',
                 'expected' => 'core, move, {{#onjs}} some nasty JS {{/onjs}}'
             ],
-            'single disallowed 1' => [
-                'disallowed' => ['js'],
+            'single blacklist 1' => [
+                'blacklist' => ['js'],
                 'input' => 'core, move, {{#js}} some nasty JS {{/js}}',
                 'expected' => 'core, move, {{}}'
             ],
-            'single disallowed 2' => [
-                'disallowed' => ['js'],
+            'single blacklist 2' => [
+                'blacklist' => ['js'],
                 'input' => 'core, move, {{ # js }} some nasty JS {{ /  js }}',
                 'expected' => 'core, move, {{}}'
             ],
-            'single disallowed 3' => [
-                'disallowed' => ['js'],
+            'single blacklist 3' => [
+                'blacklist' => ['js'],
                 'input' => 'core, {{#js}} some nasty JS {{/js}}, test',
                 'expected' => 'core, {{}}, test'
             ],
-            'single disallowed 3' => [
-                'disallowed' => ['js'],
+            'single blacklist 3' => [
+                'blacklist' => ['js'],
                 'input' => 'core, {{#ok}} this is ok {{/ok}}, {{#js}} some nasty JS {{/js}}',
                 'expected' => 'core, {{#ok}} this is ok {{/ok}}, {{}}'
             ],
-            'single disallowed multiple matches 1' => [
-                'disallowed' => ['js'],
+            'single blacklist multiple matches 1' => [
+                'blacklist' => ['js'],
                 'input' => 'core, {{#js}} some nasty JS {{/js}}, {{#js}} some nasty JS {{/js}}',
                 'expected' => 'core, {{}}'
             ],
-            'single disallowed multiple matches 2' => [
-                'disallowed' => ['js'],
+            'single blacklist multiple matches 2' => [
+                'blacklist' => ['js'],
                 'input' => 'core, {{ # js }} some nasty JS {{ /  js }}, {{ # js }} some nasty JS {{ /  js }}',
                 'expected' => 'core, {{}}'
             ],
-            'single disallowed multiple matches nested 1' => [
-                'disallowed' => ['js'],
+            'single blacklist multiple matches nested 1' => [
+                'blacklist' => ['js'],
                 'input' => 'core, move, {{#js}} some nasty JS {{#js}} some nasty JS {{/js}} {{/js}}',
                 'expected' => 'core, move, {{}}'
             ],
-            'single disallowed multiple matches nested 2' => [
-                'disallowed' => ['js'],
+            'single blacklist multiple matches nested 2' => [
+                'blacklist' => ['js'],
                 'input' => 'core, move, {{ # js }} some nasty JS {{ # js }} some nasty JS {{ /  js }}{{ /  js }}',
                 'expected' => 'core, move, {{}}'
             ],
-            'multiple disallowed 1' => [
-                'disallowed' => ['js', 'foo'],
+            'multiple blacklist 1' => [
+                'blacklist' => ['js', 'foo'],
                 'input' => 'core, move, {{#js}} some nasty JS {{/js}}',
                 'expected' => 'core, move, {{}}'
             ],
-            'multiple disallowed 2' => [
-                'disallowed' => ['js', 'foo'],
+            'multiple blacklist 2' => [
+                'blacklist' => ['js', 'foo'],
                 'input' => 'core, {{#foo}} blah {{/foo}}, {{#js}} js {{/js}}',
                 'expected' => 'core, {{}}, {{}}'
             ],
-            'multiple disallowed 3' => [
-                'disallowed' => ['js', 'foo'],
+            'multiple blacklist 3' => [
+                'blacklist' => ['js', 'foo'],
                 'input' => '{{#foo}} blah {{/foo}}, {{#foo}} blah {{/foo}}, {{#js}} js {{/js}}',
                 'expected' => '{{}}, {{}}'
             ],
-            'multiple disallowed 4' => [
-                'disallowed' => ['js', 'foo'],
+            'multiple blacklist 4' => [
+                'blacklist' => ['js', 'foo'],
                 'input' => '{{#foo}} blah {{/foo}}, {{#js}} js {{/js}}, {{#foo}} blah {{/foo}}',
                 'expected' => '{{}}'
             ],
-            'multiple disallowed 4' => [
-                'disallowed' => ['js', 'foo'],
+            'multiple blacklist 4' => [
+                'blacklist' => ['js', 'foo'],
                 'input' => 'core, move, {{#js}} JS {{#foo}} blah {{/foo}} {{/js}}',
                 'expected' => 'core, move, {{}}'
             ],
@@ -126,29 +126,29 @@ class core_output_mustache_helper_collection_testcase extends advanced_testcase 
 
     /**
      * Test that the mustache_helper_collection class correctly strips
-     * @dataProvider get_strip_disallowed_helpers_testcases()
-     * @param string[] $disallowed The list of helpers to strip
+     * @dataProvider get_strip_blacklisted_helpers_testcases()
+     * @param string[] $blacklist The list of helpers to strip
      * @param string $input The input string for the helper
-     * @param string $expected The expected output of the string after disallowed strip
+     * @param string $expected The expected output of the string after blacklist strip
      */
-    public function test_strip_disallowed_helpers($disallowed, $input, $expected) {
-        $collection = new mustache_helper_collection(null, $disallowed);
-        $this->assertEquals($expected, $collection->strip_disallowed_helpers($disallowed, $input));
+    public function test_strip_blacklisted_helpers($blacklist, $input, $expected) {
+        $collection = new mustache_helper_collection(null, $blacklist);
+        $this->assertEquals($expected, $collection->strip_blacklisted_helpers($blacklist, $input));
     }
 
     /**
-     * Test that the disallowed helpers are disabled during the execution of other
+     * Test that the blacklisted helpers are disabled during the execution of other
      * helpers.
      *
-     * Any allowed helper should still be available to call during the
+     * Any non-blacklisted helper should still be available to call during the
      * execution of a helper.
      */
-    public function test_disallowed_helpers_disabled_during_execution() {
+    public function test_blacklisted_helpers_disabled_during_execution() {
         $engine = new \Mustache_Engine();
         $context = new \Mustache_Context();
         $lambdahelper = new \Mustache_LambdaHelper($engine, $context);
-        $disallowed = ['bad'];
-        $collection = new mustache_helper_collection(null, $disallowed);
+        $blacklist = ['bad'];
+        $collection = new mustache_helper_collection(null, $blacklist);
         $badcalled = false;
         $goodcalled = false;
 
@@ -173,17 +173,5 @@ class core_output_mustache_helper_collection_testcase extends advanced_testcase 
         $this->assertEquals('success output', $collection->get('test')('success output', $lambdahelper));
         $this->assertTrue($goodcalled);
         $this->assertFalse($badcalled);
-    }
-
-    /**
-     * Test that calling deprecated method strip_blacklisted_helpers() still works and shows developer debugging.
-     */
-    public function test_deprecated_strip_blacklisted_helpers() {
-
-        $collection = new mustache_helper_collection(null, ['js']);
-        $stripped = $collection->strip_blacklisted_helpers(['js'], '{{#js}} JS {{/js}}');
-        $this->assertEquals('{{}}', $stripped);
-        $this->assertDebuggingCalled('mustache_helper_collection::strip_blacklisted_helpers() is deprecated. ' .
-            'Please use mustache_helper_collection::strip_disallowed_helpers() instead.', DEBUG_DEVELOPER);
     }
 }

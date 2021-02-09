@@ -36,7 +36,7 @@ class ltiservice_gradebookservices_privacy_provider_testcase extends provider_te
     /**
      * Basic setup for these tests.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
     }
 

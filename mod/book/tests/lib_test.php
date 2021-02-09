@@ -39,7 +39,7 @@ require_once($CFG->dirroot . '/mod/book/lib.php');
  */
 class mod_book_lib_testcase extends advanced_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
         $this->setAdminUser();
     }

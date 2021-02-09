@@ -269,7 +269,12 @@ class lesson_page_type_essay extends lesson_page {
         return true;
     }
     public function stats(array &$pagestats, $tries) {
-        $temp = $this->lesson->get_last_attempt($tries);
+        if(count($tries) > $this->lesson->maxattempts) { // if there are more tries than the max that is allowed, grab the last "legal" attempt
+            $temp = $tries[$this->lesson->maxattempts - 1];
+        } else {
+            // else, user attempted the question less than the max, so grab the last one
+            $temp = end($tries);
+        }
         $essayinfo = self::extract_useranswer($temp->useranswer);
         if ($essayinfo->graded) {
             if (isset($pagestats[$temp->pageid])) {

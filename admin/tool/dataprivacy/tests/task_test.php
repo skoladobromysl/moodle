@@ -39,7 +39,7 @@ class tool_dataprivacy_task_testcase extends data_privacy_testcase {
     /**
      * Test tearDown.
      */
-    public function tearDown(): void {
+    public function tearDown() {
         \core_privacy\local\request\writer::reset();
     }
 

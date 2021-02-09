@@ -97,14 +97,14 @@ abstract class question_attempt_upgrader_test_base extends advanced_testcase {
     protected $updater;
     protected $loader;
 
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
         $logger = new dummy_question_engine_assumption_logger();
         $this->loader = new test_question_engine_upgrade_question_loader($logger);
         $this->updater = new test_question_engine_attempt_upgrader($this->loader, $logger);
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->updater = null;
         parent::tearDown();
     }

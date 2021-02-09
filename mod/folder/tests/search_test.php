@@ -43,7 +43,7 @@ class mod_folder_search_testcase extends advanced_testcase {
      */
     protected $folderareaid = null;
 
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
         set_config('enableglobalsearch', true);
 

@@ -49,10 +49,6 @@ list($options, $unrecognized) = cli_get_params(
         'torun'    => 0,
         'optimize-runs' => '',
         'add-core-features-to-theme' => false,
-        'axe'      => false,
-        'disable-composer' => false,
-        'composer-upgrade' => true,
-        'composer-self-update' => true,
     ),
     array(
         'j' => 'parallel',
@@ -68,36 +64,18 @@ $help = "
 Behat utilities to initialise behat tests
 
 Usage:
-  php init.php      [--parallel=value [--maxruns=value] [--fromrun=value --torun=value]]
-                    [--axe] [-o | --optimize-runs] [-a | --add-core-features-to-theme]
-                    [--no-composer-self-update] [--no-composer-upgrade]
-                    [--disable-composer]
-                    [--help]
+  php init.php [--parallel=value [--maxruns=value] [--fromrun=value --torun=value]] [--help]
 
 Options:
--j, --parallel      Number of parallel behat run to initialise
--m, --maxruns       Max parallel processes to be executed at one time
---fromrun           Execute run starting from (Used for parallel runs on different vms)
---torun             Execute run till (Used for parallel runs on different vms)
---axe               Include axe accessibility tests
+-j, --parallel   Number of parallel behat run to initialise
+-m, --maxruns    Max parallel processes to be executed at one time.
+--fromrun        Execute run starting from (Used for parallel runs on different vms)
+--torun          Execute run till (Used for parallel runs on different vms)
 
--o, --optimize-runs
-                    Split features with specified tags in all parallel runs.
+-o, --optimize-runs Split features with specified tags in all parallel runs.
+-a, --add-core-features-to-theme Add all core features to specified theme's
 
--a, --add-core-features-to-theme
-                    Add all core features to specified theme's
-
---no-composer-self-update
-                    Prevent upgrade of the composer utility using its self-update command
-
---no-composer-upgrade
-                    Prevent update development dependencies using composer
-
---disable-composer
-                    A shortcut to disable composer self-update and dependency update
-                    Note: Installation of composer and/or dependencies will still happen as required
-
--h, --help          Print out this help
+-h, --help     Print out this help
 
 Example from Moodle root directory:
 \$ php admin/tool/behat/cli/init.php --parallel=2
@@ -124,10 +102,7 @@ if ($options['parallel'] && $options['parallel'] > 1) {
     }
 } else {
     // Only sanitize options for single run.
-    $cmdoptionsforsinglerun = [
-        'add-core-features-to-theme',
-        'axe',
-    ];
+    $cmdoptionsforsinglerun = array('add-core-features-to-theme');
 
     foreach ($cmdoptionsforsinglerun as $option) {
         if (!empty($options[$option])) {
@@ -140,15 +115,8 @@ if ($options['parallel'] && $options['parallel'] > 1) {
 $cwd = getcwd();
 $output = null;
 
-if ($options['disable-composer']) {
-    // Disable self-update and upgrade easily.
-    // Note: Installation will still occur regardless of this setting.
-    $options['composer-self-update'] = false;
-    $options['composer-upgrade'] = false;
-}
-
-// Install and update composer and dependencies as required.
-testing_update_composer_dependencies($options['composer-self-update'], $options['composer-upgrade']);
+// If behat dependencies not downloaded then do it first, else symfony/process can't be used.
+testing_update_composer_dependencies();
 
 // Check whether the behat test environment needs to be updated.
 chdir(__DIR__);

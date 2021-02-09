@@ -56,7 +56,7 @@ class mod_forum_privacy_provider_testcase extends \core_privacy\tests\provider_t
     /**
      * Test setUp.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest(true);
     }
 

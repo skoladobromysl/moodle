@@ -45,11 +45,11 @@ class qtype_calculated_test extends advanced_testcase {
     protected $tolerance = 0.00000001;
     protected $qtype;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->qtype = new qtype_calculated();
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->qtype = null;
     }
 

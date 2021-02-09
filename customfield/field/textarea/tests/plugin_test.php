@@ -48,7 +48,7 @@ class customfield_textarea_plugin_testcase extends advanced_testcase {
     /**
      * Tests set up.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
 
         $this->cfcat = $this->get_generator()->create_category();

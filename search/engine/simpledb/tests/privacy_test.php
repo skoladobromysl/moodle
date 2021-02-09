@@ -41,7 +41,7 @@ require_once($CFG->dirroot . '/search/tests/fixtures/mock_search_area.php');
  */
 class privacy_model_testcase extends \core_privacy\tests\provider_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
         global $DB;
 
         if ($this->requires_manual_index_update()) {
@@ -103,7 +103,7 @@ class privacy_model_testcase extends \core_privacy\tests\provider_testcase {
      *
      * @return void
      */
-    public function tearDown(): void {
+    public function tearDown() {
         // Call parent tearDown() first.
         parent::tearDown();
 

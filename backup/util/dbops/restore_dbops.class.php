@@ -1165,7 +1165,7 @@ abstract class restore_dbops {
 
             // if user lang doesn't exist here, use site default
             if (!array_key_exists($user->lang, $languages)) {
-                $user->lang = get_newuser_language();
+                $user->lang = $CFG->lang;
             }
 
             // if user theme isn't available on target site or they are disabled, reset theme

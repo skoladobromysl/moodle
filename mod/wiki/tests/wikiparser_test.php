@@ -54,7 +54,7 @@ class mod_wiki_wikiparser_test extends basic_testcase {
             'link_callback_args' => ['swid' => 1],
         ]);
 
-        $this->assertStringContainsString($output, $parsingresult['parsed_text']);
+        $this->assertContains($output, $parsingresult['parsed_text']);
     }
 
     /**

@@ -44,9 +44,6 @@ class qtype_essay_question extends question_with_responses {
     public $responsefieldlines;
     public $attachments;
 
-    /** @var int maximum file size in bytes */
-    public $maxbytes;
-
     /** @var int The number of attachments required for a response to be complete. */
     public $attachmentsrequired;
 
@@ -114,10 +111,10 @@ class qtype_essay_question extends question_with_responses {
         if ($hasattachments) {
             // Check the filetypes.
             $filetypesutil = new \core_form\filetypes_util();
-            $allowlist = $filetypesutil->normalize_file_types($this->filetypeslist);
+            $whitelist = $filetypesutil->normalize_file_types($this->filetypeslist);
             $wrongfiles = array();
             foreach ($response['attachments']->get_files() as $file) {
-                if (!$filetypesutil->is_allowed_file_type($file->get_filename(), $allowlist)) {
+                if (!$filetypesutil->is_allowed_file_type($file->get_filename(), $whitelist)) {
                     $wrongfiles[] = $file->get_filename();
                 }
             }

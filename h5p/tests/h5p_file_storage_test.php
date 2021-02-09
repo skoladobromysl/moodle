@@ -60,7 +60,7 @@ class h5p_file_storage_testcase extends \advanced_testcase {
     /** @var int $libraryid an id for the library. */
     protected $libraryid = 1;
 
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
         $this->resetAfterTest(true);
 
@@ -596,7 +596,7 @@ class h5p_file_storage_testcase extends \advanced_testcase {
             $h5plib->minorversion
         );
         if ($expected) {
-            $this->assertStringContainsString(file_storage::ICON_FILENAME, $iconurl);
+            $this->assertContains(file_storage::ICON_FILENAME, $iconurl);
         } else {
             $this->assertFalse($iconurl);
         }

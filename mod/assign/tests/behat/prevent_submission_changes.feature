@@ -125,3 +125,4 @@ Feature: Prevent or allow assignment submission changes
     And I set the following fields to these values:
       | Online text | I'm the student2 submission and he/she edited me |
     And I press "Save changes"
+    And I log out

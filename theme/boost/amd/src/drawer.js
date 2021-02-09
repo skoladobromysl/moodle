@@ -20,8 +20,8 @@
  * @copyright  2016 Damyon Wiese
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/custom_interaction_events', 'core/log', 'core/pubsub', 'core/aria'],
-     function($, CustomEvents, Log, PubSub, Aria) {
+define(['jquery', 'core/custom_interaction_events', 'core/log', 'core/pubsub'],
+     function($, CustomEvents, Log, PubSub) {
 
     var SELECTORS = {
         TOGGLE_REGION: '[data-region="drawer-toggle"]',
@@ -87,7 +87,7 @@ define(['jquery', 'core/custom_interaction_events', 'core/log', 'core/pubsub', '
 
             trigger.attr('aria-expanded', 'false');
             body.removeClass('drawer-open-' + side);
-            Aria.hide(drawer.get());
+            drawer.attr('aria-hidden', 'true');
             drawer.addClass('closed');
             if (!small) {
                 M.util.set_user_preference(preference, 'false');
@@ -117,7 +117,7 @@ define(['jquery', 'core/custom_interaction_events', 'core/log', 'core/pubsub', '
         if (!open) {
             // Open.
             trigger.attr('aria-expanded', 'true');
-            Aria.unhide(drawer.get());
+            drawer.attr('aria-hidden', 'false');
             drawer.focus();
             body.addClass('drawer-open-' + side);
             drawer.removeClass('closed');
@@ -129,8 +129,7 @@ define(['jquery', 'core/custom_interaction_events', 'core/log', 'core/pubsub', '
             body.removeClass('drawer-open-' + side);
             trigger.attr('aria-expanded', 'false');
             drawer.addClass('closed').delay(500).queue(function() {
-                Aria.hide(this);
-                $(this).dequeue();
+                $(this).attr('aria-hidden', 'true').dequeue();
             });
             if (!small) {
                 M.util.set_user_preference(preference, 'false');
@@ -184,8 +183,7 @@ define(['jquery', 'core/custom_interaction_events', 'core/log', 'core/pubsub', '
         // to either an open or closed state.
         $(SELECTORS.DRAWER).on('webkitTransitionEnd msTransitionEnd transitionend', function(e) {
             var drawer = $(e.target).closest(SELECTORS.DRAWER);
-            // Note: aria-hidden is either present, or absent. It should not be set to false.
-            var open = !!drawer.attr('aria-hidden');
+            var open = drawer.attr('aria-hidden') == 'false';
             PubSub.publish('nav-drawer-toggle-end', open);
         });
     };

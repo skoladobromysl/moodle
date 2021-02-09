@@ -304,6 +304,19 @@ class provider implements
                 $tmpdata['timecopied'] = transform::datetime($definition->timecopied);
             }
 
+            // MDL-63167 - This section is to be removed with the final deprecation of the gradingform_provider interface.
+            // Export gradingform information (if needed).
+            $instancedata = manager::component_class_callback(
+                "gradingform_{$definition->method}",
+                gradingform_provider::class,
+                'get_gradingform_export_data',
+                [$context, $definition, $userid]
+            );
+            if (null !== $instancedata) {
+                $tmpdata = array_merge($tmpdata, $instancedata);
+            }
+            // End of section to be removed with deprecation.
+
             $defdata[] = (object) $tmpdata;
 
             // Export grading_instances information.
@@ -365,7 +378,14 @@ class provider implements
      * @param \context $context the context to delete in.
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
-        // The only information left to be deleted here is the grading definitions. Currently we are not deleting these.
+        // MDL-63167 - This section is to be removed with the final deprecation of the gradingform_provider interface.
+        manager::plugintype_class_callback(
+            'gradingform',
+            gradingform_provider::class,
+            'delete_gradingform_for_context',
+            [$context]
+        );
+        // End of section to be removed for final deprecation.
     }
 
     /**
@@ -375,7 +395,14 @@ class provider implements
      * @param approved_contextlist $contextlist a list of contexts approved for deletion.
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
-        // The only information left to be deleted here is the grading definitions. Currently we are not deleting these.
+        // MDL-63167 - This section is to be removed with the final deprecation of the gradingform_provider interface.
+        manager::plugintype_class_callback(
+            'gradingform',
+            gradingform_provider::class,
+            'delete_gradingform_for_userid',
+            [$contextlist]
+        );
+        // End of section to be removed for final deprecation.
     }
 
     /**

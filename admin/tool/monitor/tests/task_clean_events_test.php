@@ -35,7 +35,7 @@ class tool_monitor_task_clean_events_testcase extends advanced_testcase {
     /**
      * Test set up.
      */
-    public function setUp(): void {
+    public function setUp() {
         set_config('enablemonitor', 1, 'tool_monitor');
         $this->resetAfterTest(true);
     }

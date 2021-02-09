@@ -86,6 +86,8 @@ export default {
         sitetopic: 'div.sitetopic',
         tab: 'a[data-toggle="tab"]',
         activetab: 'a[data-toggle="tab"][aria-selected="true"]',
-        visibletabs: 'a[data-toggle="tab"]:not(.d-none)'
+        visibletabs: 'a[data-toggle="tab"]:not(.d-none)',
+        searchicon: '.input-group-append .search-icon',
+        clearsearch: '.input-group-append .clear'
     },
 };

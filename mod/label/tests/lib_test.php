@@ -39,7 +39,7 @@ class mod_label_lib_testcase extends advanced_testcase {
     /**
      * Set up.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
         $this->setAdminUser();
     }

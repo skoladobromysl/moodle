@@ -44,7 +44,7 @@ require_once(__DIR__ . '/fixtures/test_target_course_users.php');
  */
 class core_analytics_privacy_model_testcase extends \core_privacy\tests\provider_testcase {
 
-    public function setUp(): void {
+    public function setUp() {
 
         $this->resetAfterTest(true);
         $this->setAdminUser();

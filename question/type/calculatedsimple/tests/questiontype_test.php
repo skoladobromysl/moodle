@@ -48,11 +48,11 @@ class qtype_calculatedsimple_test extends advanced_testcase {
 
     protected $qtype;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->qtype = new qtype_calculatedsimple();
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->qtype = null;
     }
 
@@ -90,13 +90,13 @@ class qtype_calculatedsimple_test extends advanced_testcase {
 
         foreach ($questiondata as $property => $value) {
             if (!in_array($property, array('id', 'version', 'timemodified', 'timecreated', 'options'))) {
-                $this->assertEquals($value, $actualquestiondata->$property);
+                $this->assertAttributeEquals($value, $property, $actualquestiondata);
             }
         }
 
         foreach ($questiondata->options as $optionname => $value) {
             if ($optionname != 'answers') {
-                $this->assertEquals($value, $actualquestiondata->options->$optionname);
+                $this->assertAttributeEquals($value, $optionname, $actualquestiondata->options);
             }
         }
 
@@ -104,7 +104,7 @@ class qtype_calculatedsimple_test extends advanced_testcase {
             $actualanswer = array_shift($actualquestiondata->options->answers);
             foreach ($answer as $ansproperty => $ansvalue) {
                 if (!in_array($ansproperty, array('id', 'question', 'answerformat'))) {
-                    $this->assertEquals($ansvalue, $actualanswer->$ansproperty);
+                    $this->assertAttributeEquals($ansvalue, $ansproperty, $actualanswer);
                 }
             }
         }

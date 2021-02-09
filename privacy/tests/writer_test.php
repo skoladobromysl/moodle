@@ -45,7 +45,7 @@ class writer_test extends advanced_testcase {
      * Ensure that the writer is cleared away as appropriate after each
      * test.
      */
-    public function tearDown(): void {
+    public function tearDown() {
         writer::reset();
     }
 

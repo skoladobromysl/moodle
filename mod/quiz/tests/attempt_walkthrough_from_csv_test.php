@@ -57,7 +57,8 @@ class mod_quiz_attempt_walkthrough_from_csv_testcase extends advanced_testcase {
      * directory.
      *
      * @param array $quizsettings of settings read from csv file quizzes.csv
-     * @param array $csvdata of data read from csv file "questionsXX.csv", "stepsXX.csv" and "resultsXX.csv".
+     * @param PHPUnit\DbUnit\DataSet\ITable[] $csvdata of data read from csv file "questionsXX.csv",
+     *                                                                                  "stepsXX.csv" and "resultsXX.csv".
      * @dataProvider get_data_for_walkthrough
      */
     public function test_walkthrough_from_csv($quizsettings, $csvdata) {
@@ -76,8 +77,8 @@ class mod_quiz_attempt_walkthrough_from_csv_testcase extends advanced_testcase {
         $slots = array();
         $qidsbycat = array();
         $sumofgrades = 0;
-        foreach ($qs as $qsrow) {
-            $q = $this->explode_dot_separated_keys_to_make_subindexs($qsrow);
+        for ($rowno = 0; $rowno < $qs->getRowCount(); $rowno++) {
+            $q = $this->explode_dot_separated_keys_to_make_subindexs($qs->getRow($rowno));
 
             $catname = array('name' => $q['cat']);
             if (!$cat = $DB->get_record('question_categories', array('name' => $q['cat']))) {
@@ -145,7 +146,7 @@ class mod_quiz_attempt_walkthrough_from_csv_testcase extends advanced_testcase {
      * Create quiz, simulate attempts and check results (if resultsXX.csv exists).
      *
      * @param array $quizsettings Quiz overrides for this quiz.
-     * @param array $csvdata Data loaded from csv files for this test.
+     * @param PHPUnit\DbUnit\DataSet\ITable[] $csvdata Data loaded from csv files for this test.
      */
     protected function create_quiz_simulate_attempts_and_check_results($quizsettings, $csvdata) {
         $this->resetAfterTest(true);
@@ -176,11 +177,11 @@ class mod_quiz_attempt_walkthrough_from_csv_testcase extends advanced_testcase {
      *
      * @param string $setname
      * @param string $test
-     * @return array
+     * @return PHPUnit\DbUnit\DataSet\ITable
      */
     protected function load_csv_data_file($setname, $test='') {
         $files = array($setname => $this->get_full_path_of_csv_file($setname, $test));
-        return $this->dataset_from_files($files)->get_rows([$setname]);
+        return $this->createCsvDataSet($files)->getTable($setname);
     }
 
     /**
@@ -216,13 +217,14 @@ class mod_quiz_attempt_walkthrough_from_csv_testcase extends advanced_testcase {
      *                  test_walkthrough_from_csv.
      */
     public function get_data_for_walkthrough() {
-        $quizzes = $this->load_csv_data_file('quizzes')['quizzes'];
+        $quizzes = $this->load_csv_data_file('quizzes');
         $datasets = array();
-        foreach ($quizzes as $quizsettings) {
+        for ($rowno = 0; $rowno < $quizzes->getRowCount(); $rowno++) {
+            $quizsettings = $quizzes->getRow($rowno);
             $dataset = array();
             foreach ($this->files as $file) {
                 if (file_exists($this->get_full_path_of_csv_file($file, $quizsettings['testnumber']))) {
-                    $dataset[$file] = $this->load_csv_data_file($file, $quizsettings['testnumber'])[$file];
+                    $dataset[$file] = $this->load_csv_data_file($file, $quizsettings['testnumber']);
                 }
             }
             $datasets[] = array($quizsettings, $dataset);
@@ -231,15 +233,15 @@ class mod_quiz_attempt_walkthrough_from_csv_testcase extends advanced_testcase {
     }
 
     /**
-     * @param $steps array the step data from the csv file.
+     * @param $steps PHPUnit\DbUnit\DataSet\ITable the step data from the csv file.
      * @return array attempt no as in csv file => the id of the quiz_attempt as stored in the db.
      */
     protected function walkthrough_attempts($steps) {
         global $DB;
         $attemptids = array();
-        foreach ($steps as $steprow) {
+        for ($rowno = 0; $rowno < $steps->getRowCount(); $rowno++) {
 
-            $step = $this->explode_dot_separated_keys_to_make_subindexs($steprow);
+            $step = $this->explode_dot_separated_keys_to_make_subindexs($steps->getRow($rowno));
             // Find existing user or make a new user to do the quiz.
             $username = array('firstname' => $step['firstname'],
                               'lastname'  => $step['lastname']);
@@ -292,12 +294,12 @@ class mod_quiz_attempt_walkthrough_from_csv_testcase extends advanced_testcase {
     }
 
     /**
-     * @param $results array the results data from the csv file.
+     * @param $results PHPUnit\DbUnit\DataSet\ITable the results data from the csv file.
      * @param $attemptids array attempt no as in csv file => the id of the quiz_attempt as stored in the db.
      */
     protected function check_attempts_results($results, $attemptids) {
-        foreach ($results as $resultrow) {
-            $result = $this->explode_dot_separated_keys_to_make_subindexs($resultrow);
+        for ($rowno = 0; $rowno < $results->getRowCount(); $rowno++) {
+            $result = $this->explode_dot_separated_keys_to_make_subindexs($results->getRow($rowno));
             // Re-load quiz attempt data.
             $attemptobj = quiz_attempt::create($attemptids[$result['quizattempt']]);
             $this->check_attempt_results($result, $attemptobj);

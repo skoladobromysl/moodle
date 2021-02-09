@@ -178,7 +178,6 @@ define('CALENDAR_EVENT_TYPE_ACTION', 1);
  * @property string $eventtype The event type
  * @property int $timestart The start time as a timestamp
  * @property int $timeduration The duration of the event in seconds
- * @property int $timeusermidnight User midnight for the event
  * @property int $visible 1 if the event is visible
  * @property int $uuid ?
  * @property int $sequence ?
@@ -3273,7 +3272,7 @@ function calendar_get_calendar_context($subscription) {
 }
 
 /**
- * Implements callback user_preferences, lists preferences that users are allowed to update directly
+ * Implements callback user_preferences, whitelists preferences that users are allowed to update directly
  *
  * Used in {@see core_user::fill_preferences_cache()}, see also {@see useredit_update_user_preference()}
  *
@@ -3683,10 +3682,11 @@ function calendar_get_timestamp($d, $m, $y, $time = 0) {
  * @return array The data for template and template name.
  */
 function calendar_get_footer_options($calendar) {
-    global $CFG, $USER, $PAGE;
+    global $CFG, $USER, $DB, $PAGE;
 
     // Generate hash for iCal link.
-    $authtoken = calendar_get_export_token($USER);
+    $rawhash = $USER->id . $DB->get_field('user', 'password', ['id' => $USER->id]) . $CFG->calendar_exportsalt;
+    $authtoken = sha1($rawhash);
 
     $renderer = $PAGE->get_renderer('core_calendar');
     $footer = new \core_calendar\external\footer_options_exporter($calendar, $USER->id, $authtoken);
@@ -3919,16 +3919,4 @@ function calendar_internal_update_course_and_group_permission(int $courseid, con
             }
         }
     }
-}
-
-/**
- * Get the auth token for exporting the given user calendar.
- * @param stdClass $user The user to export the calendar for
- *
- * @return string The export token.
- */
-function calendar_get_export_token(stdClass $user): string {
-    global $CFG, $DB;
-
-    return sha1($user->id . $DB->get_field('user', 'password', ['id' => $user->id]) . $CFG->calendar_exportsalt);
 }

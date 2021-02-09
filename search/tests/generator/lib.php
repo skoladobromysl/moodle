@@ -37,7 +37,7 @@ class core_search_generator extends component_generator_base {
     /**
      * Creates the mock search area temp table.
      */
-    public function setUp(): void {
+    public function setup() {
         global $DB;
 
         $dbman = $DB->get_manager();
@@ -56,7 +56,7 @@ class core_search_generator extends component_generator_base {
     /**
      * Destroys the mock search area temp table.
      */
-    public function tearDown(): void {
+    public function teardown() {
         global $DB;
 
         $dbman = $DB->get_manager();

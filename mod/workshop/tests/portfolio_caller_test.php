@@ -47,7 +47,7 @@ class mod_workshop_porfolio_caller_testcase extends advanced_testcase {
     /**
      * Setup testing environment.
      */
-    protected function setUp(): void {
+    protected function setUp() {
         parent::setUp();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
@@ -59,7 +59,7 @@ class mod_workshop_porfolio_caller_testcase extends advanced_testcase {
     /**
      * Tear down.
      */
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->workshop = null;
         $this->cm = null;
         parent::tearDown();

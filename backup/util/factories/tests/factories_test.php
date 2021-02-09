@@ -40,7 +40,7 @@ require_once($CFG->dirroot . '/backup/util/factories/backup_factory.class.php');
  */
 class backup_factories_testcase extends advanced_testcase {
 
-    public function setUp(): void {
+    function setUp() {
         global $CFG;
         parent::setUp();
 
@@ -57,7 +57,7 @@ class backup_factories_testcase extends advanced_testcase {
     /**
      * test get_logger_chain() method
      */
-    public function test_backup_factory() {
+    function test_backup_factory() {
         global $CFG;
 
         // Default instantiate, all levels = backup::LOG_NONE

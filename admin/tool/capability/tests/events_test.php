@@ -36,7 +36,7 @@ class tool_capability_events_testcase extends advanced_testcase {
     /**
      * Setup testcase.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->setAdminUser();
         $this->resetAfterTest();
     }

@@ -48,7 +48,7 @@ class enrol_lti_helper_testcase extends advanced_testcase {
      *
      * This is executed before running any test in this file.
      */
-    public function setUp(): void {
+    public function setUp() {
         $this->resetAfterTest();
 
         // Set this user as the admin.
@@ -351,7 +351,7 @@ class enrol_lti_helper_testcase extends advanced_testcase {
         $tool1 = $generator->create_lti_tool($data);
 
         $description = \enrol_lti\helper::get_description($tool1);
-        $this->assertStringContainsString('Test course 1 Lorem ipsum dolor sit amet', $description);
+        $this->assertContains('Test course 1 Lorem ipsum dolor sit amet', $description);
 
         $module1 = $generator->create_module('assign', array(
                 'course' => $course1->id
@@ -360,7 +360,7 @@ class enrol_lti_helper_testcase extends advanced_testcase {
         $data->cmid = $module1->cmid;
         $tool2 = $generator->create_lti_tool($data);
         $description = \enrol_lti\helper::get_description($tool2);
-        $this->assertStringContainsString('Test assign 1', $description);
+        $this->assertContains('Test assign 1', $description);
     }
 
     /**
@@ -377,7 +377,7 @@ class enrol_lti_helper_testcase extends advanced_testcase {
         $icon = \enrol_lti\helper::get_icon($tool);
         $icon = $icon->out();
         // Only local icons are supported by the LTI framework.
-        $this->assertStringContainsString($CFG->wwwroot, $icon);
+        $this->assertContains($CFG->wwwroot, $icon);
 
     }
 
@@ -532,8 +532,8 @@ class enrol_lti_helper_testcase extends advanced_testcase {
         $tool1 = $this->getDataGenerator()->create_lti_tool($data);
 
         $cartridge = \enrol_lti\helper::create_cartridge($tool1->id);
-        $this->assertStringContainsString('<blti:title>Test LTI</blti:title>', $cartridge);
-        $this->assertStringContainsString("<blti:icon>$CFG->wwwroot/theme/image.php/_s/boost/theme/1/favicon</blti:icon>", $cartridge);
-        $this->assertStringContainsString("<blti:launch_url>$CFG->wwwroot/enrol/lti/tool.php?id=$tool1->id</blti:launch_url>", $cartridge);
+        $this->assertContains('<blti:title>Test LTI</blti:title>', $cartridge);
+        $this->assertContains("<blti:icon>$CFG->wwwroot/theme/image.php/_s/boost/theme/1/favicon</blti:icon>", $cartridge);
+        $this->assertContains("<blti:launch_url>$CFG->wwwroot/enrol/lti/tool.php?id=$tool1->id</blti:launch_url>", $cartridge);
     }
 }

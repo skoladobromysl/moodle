@@ -36,7 +36,7 @@ class media_swf_testcase extends advanced_testcase {
     /**
      * Pre-test setup. Preserves $CFG.
      */
-    public function setUp(): void {
+    public function setUp() {
         global $CFG;
         parent::setUp();
 

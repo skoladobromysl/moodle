@@ -35,3 +35,4 @@ Feature: When a Teacher hides an assignment from view for students it should con
     And I am on "Course 1" course homepage
     And I should not see "Test hidden assignment"
     And I should see "Test visible assignment"
+    And I log out

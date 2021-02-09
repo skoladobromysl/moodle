@@ -40,11 +40,11 @@ require_once($CFG->dirroot . '/question/type/multichoice/edit_multichoice_form.p
 class qtype_multichoice_test extends advanced_testcase {
     protected $qtype;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->qtype = new qtype_multichoice();
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->qtype = null;
     }
 
@@ -134,13 +134,13 @@ class qtype_multichoice_test extends advanced_testcase {
 
         foreach ($questiondata as $property => $value) {
             if (!in_array($property, array('id', 'version', 'timemodified', 'timecreated', 'options', 'hints', 'stamp'))) {
-                $this->assertEquals($value, $actualquestiondata->$property);
+                $this->assertAttributeEquals($value, $property, $actualquestiondata);
             }
         }
 
         foreach ($questiondata->options as $optionname => $value) {
             if ($optionname != 'answers') {
-                $this->assertEquals($value, $actualquestiondata->options->$optionname);
+                $this->assertAttributeEquals($value, $optionname, $actualquestiondata->options);
             }
         }
 
@@ -148,7 +148,7 @@ class qtype_multichoice_test extends advanced_testcase {
             $actualhint = array_shift($actualquestiondata->hints);
             foreach ($hint as $property => $value) {
                 if (!in_array($property, array('id', 'questionid', 'options'))) {
-                    $this->assertEquals($value, $actualhint->$property);
+                    $this->assertAttributeEquals($value, $property, $actualhint);
                 }
             }
         }
@@ -158,7 +158,7 @@ class qtype_multichoice_test extends advanced_testcase {
             foreach ($answer as $ansproperty => $ansvalue) {
                 // This question does not use 'answerformat', will ignore it.
                 if (!in_array($ansproperty, array('id', 'question', 'answerformat'))) {
-                    $this->assertEquals($ansvalue, $actualanswer->$ansproperty);
+                    $this->assertAttributeEquals($ansvalue, $ansproperty, $actualanswer);
                 }
             }
         }

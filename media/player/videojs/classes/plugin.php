@@ -340,40 +340,33 @@ class media_videojs_plugin extends core_media_player_native {
         $langfiles = get_directory_list($basedir);
         $candidates = [];
         foreach ($langfiles as $langfile) {
-            if (strtolower(pathinfo($langfile, PATHINFO_EXTENSION)) !== 'json') {
+            if (strtolower(pathinfo($langfile, PATHINFO_EXTENSION)) !== 'js') {
                 continue;
             }
-            $lang = basename($langfile, '.json');
-            if (strtolower($langfile) === $this->language . '.json') {
-                // Found an exact match for the language. It is stored in $this->language.
-                return;
+            $lang = basename($langfile, '.js');
+            if (strtolower($langfile) === $this->language . '.js') {
+                // Found an exact match for the language.
+                $js = file_get_contents($basedir . $langfile);
+                break;
             }
             if (substr($this->language, 0, 2) === strtolower(substr($langfile, 0, 2))) {
                 // Not an exact match but similar, for example "pt_br" is similar to "pt".
                 $candidates[$lang] = $langfile;
             }
         }
-
-        if ($candidates) {
+        if (empty($js) && $candidates) {
             // Exact match was not found, take the first candidate.
             $this->language = key($candidates);
-        } else {
-            // Could not match, use default language of video player (English).
-            $this->language = null;
+            $js = file_get_contents($basedir . $candidates[$this->language]);
         }
-    }
+        // Add it as a language for Video.JS.
+        if (!empty($js)) {
+            return "$js\n";
+        }
 
-    /**
-     * Returns the requested language pack in the json format.
-     *
-     * @param string $lang The language code
-     * @return false|string The read data or false on failure
-     */
-    public static function get_language_content(string $lang) {
-        global $CFG;
-        $langfile = "{$CFG->dirroot}/media/player/videojs/videojs/lang/{$lang}.json";
-
-        return file_exists($langfile) ? file_get_contents($langfile) : '';
+        // Could not match, use default language of video player (English).
+        $this->language = null;
+        return "";
     }
 
     public function supports($usedextensions = []) {
@@ -428,10 +421,14 @@ class media_videojs_plugin extends core_media_player_native {
         // Load dynamic loader. It will scan page for videojs media and load necessary modules.
         // Loader will be loaded on absolutely every page, however the videojs will only be loaded
         // when video is present on the page or added later to it in AJAX.
-        $this->find_language();
+        $path = new moodle_url('/media/player/videojs/videojs/video-js.swf');
+        $contents = 'videojs.options.flash.swf = "' . $path . '";' . "\n";
+        $contents .= $this->find_language(current_language());
         $page->requires->js_amd_inline(<<<EOT
 require(["media_videojs/loader"], function(loader) {
-    loader.setUp('$this->language');
+    loader.setUp(function(videojs) {
+        $contents
+    });
 });
 EOT
         );

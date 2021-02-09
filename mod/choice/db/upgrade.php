@@ -22,9 +22,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 function xmldb_choice_upgrade($oldversion) {
-    global $CFG, $DB;
-
-    $dbman = $DB->get_manager();
+    global $CFG;
 
     // Automatically generated Moodle v3.5.0 release upgrade line.
     // Put any upgrade step following this.
@@ -41,17 +39,5 @@ function xmldb_choice_upgrade($oldversion) {
     // Automatically generated Moodle v3.9.0 release upgrade line.
     // Put any upgrade step following this.
 
-    if ($oldversion < 2020061600) {
-        // Define field showavailable to be added to choice.
-        $table = new xmldb_table('choice');
-        $field = new xmldb_field('showavailable', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'completionsubmit');
-
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
-
-        // Choice savepoint reached.
-        upgrade_mod_savepoint(true, 2020061600, 'choice');
-    }
     return true;
 }

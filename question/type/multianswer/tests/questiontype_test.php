@@ -43,11 +43,11 @@ class qtype_multianswer_test extends advanced_testcase {
     /** @var qtype_multianswer instance of the question type class to test. */
     protected $qtype;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->qtype = new qtype_multianswer();
     }
 
-    protected function tearDown(): void {
+    protected function tearDown() {
         $this->qtype = null;
     }
 
@@ -112,7 +112,7 @@ class qtype_multianswer_test extends advanced_testcase {
 
     public function test_get_random_guess_score() {
         $q = test_question_maker::get_question_data('multianswer', 'twosubq');
-        $this->assertEqualsWithDelta(0.1666667, $this->qtype->get_random_guess_score($q), 0.0000001);
+        $this->assertEquals(0.1666667, $this->qtype->get_random_guess_score($q), '', 0.0000001);
     }
 
     public function test_load_question() {
@@ -251,13 +251,13 @@ class qtype_multianswer_test extends advanced_testcase {
 
         foreach ($questiondata as $property => $value) {
             if (!in_array($property, array('id', 'version', 'timemodified', 'timecreated', 'options', 'hints', 'stamp'))) {
-                $this->assertEquals($value, $actualquestiondata->$property);
+                $this->assertAttributeEquals($value, $property, $actualquestiondata);
             }
         }
 
         foreach ($questiondata->options as $optionname => $value) {
             if ($optionname != 'questions') {
-                $this->assertEquals($value, $actualquestiondata->options->$optionname);
+                $this->assertAttributeEquals($value, $optionname, $actualquestiondata->options);
             }
         }
 
@@ -265,7 +265,7 @@ class qtype_multianswer_test extends advanced_testcase {
             $actualhint = array_shift($actualquestiondata->hints);
             foreach ($hint as $property => $value) {
                 if (!in_array($property, array('id', 'questionid', 'options'))) {
-                    $this->assertEquals($value, $actualhint->$property);
+                    $this->assertAttributeEquals($value, $property, $actualhint);
                 }
             }
         }
@@ -279,12 +279,12 @@ class qtype_multianswer_test extends advanced_testcase {
             $actualsubq = $actualquestiondata->options->questions[$subqno];
             foreach ($subq as $subqproperty => $subqvalue) {
                 if (!in_array($subqproperty, $subqpropstoignore)) {
-                    $this->assertEquals($subqvalue, $actualsubq->$subqproperty);
+                    $this->assertAttributeEquals($subqvalue, $subqproperty, $actualsubq);
                 }
             }
             foreach ($subq->options as $optionname => $value) {
                 if (!in_array($optionname, array('answers'))) {
-                    $this->assertEquals($value, $actualsubq->options->$optionname);
+                    $this->assertAttributeEquals($value, $optionname, $actualsubq->options);
                 }
             }
             foreach ($subq->options->answers as $answer) {
@@ -292,7 +292,7 @@ class qtype_multianswer_test extends advanced_testcase {
                 foreach ($answer as $ansproperty => $ansvalue) {
                     // These questions do not use 'answerformat', will ignore it.
                     if (!in_array($ansproperty, array('id', 'question', 'answerformat'))) {
-                        $this->assertEquals($ansvalue, $actualanswer->$ansproperty);
+                        $this->assertAttributeEquals($ansvalue, $ansproperty, $actualanswer);
                     }
                 }
             }

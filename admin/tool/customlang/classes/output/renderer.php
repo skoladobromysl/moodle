@@ -57,9 +57,8 @@ class renderer extends \plugin_renderer_base {
     protected function render_tool_customlang_menu(\tool_customlang_menu $menu) {
         $output = '';
         foreach ($menu->get_items() as $item) {
-            $button = $this->single_button($item->url, $item->title, $item->method);
-            $output .= $this->box($button, 'menu');
+            $output .= $this->single_button($item->url, $item->title, $item->method);
         }
-        return $output;
+        return $this->box($output, 'menu');
     }
 }
