@@ -160,11 +160,7 @@ abstract class backup implements checksumable {
     /**
      * Usually same than major release zero version, mainly for informative/historic purposes.
      */
-<<<<<<< HEAD
     const RELEASE = '3.10';
-=======
-    const RELEASE = '3.9';
->>>>>>> MDL-67283 backup: Bump release to 3.9
 
     /**
      * Cipher to be used in backup and restore operations.
