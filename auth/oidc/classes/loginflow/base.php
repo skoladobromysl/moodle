@@ -31,22 +31,49 @@ class base {
     protected $httpclient;
 
     public function __construct() {
+        global $DB;
+
         $default = [
             'opname' => get_string('pluginname', 'auth_oidc')
         ];
         $storedconfig = (array)get_config('auth_oidc');
         $forcedconfig = [
             'field_updatelocal_idnumber' => 'oncreate',
-            'field_lock_idnumber' => 'locked',
+            'field_lock_idnumber' => 'unlocked',
             'field_updatelocal_lang' => 'oncreate',
-            'field_lock_lang' => 'locked',
-            'field_updatelocal_firstname' => 'onlogin',
+            'field_lock_lang' => 'unlocked',
+            'field_updatelocal_firstname' => 'oncreate',
             'field_lock_firstname' => 'unlocked',
-            'field_updatelocal_lastname' => 'onlogin',
+            'field_updatelocal_lastname' => 'oncreate',
             'field_lock_lastname' => 'unlocked',
-            'field_updatelocal_email' => 'onlogin',
+            'field_updatelocal_email' => 'oncreate',
             'field_lock_email' => 'unlocked',
         ];
+
+        // If local_o365 plugin is installed, use its settings for the core fields.
+        if ($DB->record_exists('config_plugins', ['plugin' => 'local_o365', 'name' => 'version'])) {
+            $fieldmaps = get_config('local_o365', 'fieldmap');
+            if ($fieldmaps === false) {
+                $fieldmaps = \local_o365\adminsetting\usersyncfieldmap::defaultmap();
+            } else {
+                $fieldmaps = @unserialize($fieldmaps);
+                if (!is_array($fieldmaps)) {
+                    $fieldmaps = \local_o365\adminsetting\usersyncfieldmap::defaultmap();
+                }
+            }
+
+            foreach ($fieldmaps as $fieldmap) {
+                $fieldmap = explode('/', $fieldmap);
+                if (count($fieldmap) !== 3) {
+                    continue;
+                }
+                list($remotefield, $localfield, $behavior) = $fieldmap;
+                if (in_array($behavior, ['onlogin', 'always'])) {
+                    $forcedconfig['field_updatelocal_' . $localfield] = 'onlogin';
+                    $forcedconfig['field_lock_' . $localfield] = 'unlocked';
+                }
+            }
+        }
 
         $this->config = (object)array_merge($default, $storedconfig, $forcedconfig);
     }
@@ -96,45 +123,88 @@ class base {
             return false;
         }
 
-        $idtoken = \auth_oidc\jwt::instance_from_encoded($tokenrec->idtoken);
-
-        $userinfo = [
-            'lang' => 'en',
-            'idnumber' => $username,
-        ];
-
-        $firstname = $idtoken->claim('given_name');
-        if (!empty($firstname)) {
-            $userinfo['firstname'] = $firstname;
+        if ($userrecord = $DB->get_record('user', ['username' => $username])) {
+            $eventtype = 'login';
+        } else {
+            $eventtype = 'create';
         }
 
-        $lastname = $idtoken->claim('family_name');
-        if (!empty($lastname)) {
-            $userinfo['lastname'] = $lastname;
-        }
-
-        $email = $idtoken->claim('email');
-        if (!empty($email)) {
-            $userinfo['email'] = $email;
-        }
-
-        if (empty($userinfo['email'])) {
-            $aademail = $idtoken->claim('upn');
-            if (!empty($aademail)) {
-                $aademailvalidateresult = filter_var($aademail, FILTER_VALIDATE_EMAIL);
-                if (!empty($aademailvalidateresult)) {
-                    $userinfo['email'] = $aademail;
-                }
-            }
-        }
-
-        // O365 provides custom field mapping. Perform that mapping now if it's installed.
         $o365installed = $DB->get_record('config_plugins', ['plugin' => 'local_o365', 'name' => 'version']);
         if (!empty($o365installed)) {
-            $apiclient = \local_o365\utils::get_api($tokenrec->userid);
-            $userdata = $apiclient->get_user($tokenrec->oidcuniqid);
-            $updateduser = \local_o365\feature\usersync\main::apply_configured_fieldmap($userdata, (object)$userinfo, 'login');
+            if (\local_o365\feature\usersync\main::fieldmap_require_graph_api_call($eventtype)) {
+                // If local_o365 is installed, and field mapping uses fields not covered by token,
+                // then call Graph API function to get user details.
+                $apiclient = \local_o365\utils::get_api($tokenrec->userid);
+                $userdata = $apiclient->get_user($tokenrec->oidcuniqid);
+            } else {
+                // If local_o365 is installed, but all field mapping fields are in token, then use token.
+                $userdata = [];
+
+                $idtoken = \auth_oidc\jwt::instance_from_encoded($tokenrec->idtoken);
+
+                $oid = $idtoken->claim('oid');
+                if (!empty($oid)) {
+                    $userdata['objectId'] = $oid;
+                }
+
+                $upn = $idtoken->claim('upn');
+                if (!empty($upn)) {
+                    $userdata['userPrincipalName'] = $upn;
+                }
+
+                $firstname = $idtoken->claim('given_name');
+                if (!empty($firstname)) {
+                    $userdata['firstname'] = $firstname;
+                }
+
+                $lastname = $idtoken->claim('family_name');
+                if (!empty($lastname)) {
+                    $userdata['surname'] = $lastname;
+                }
+
+                $email = $idtoken->claim('email');
+                if (!empty($email)) {
+                    $userdata['mail'] = $email;
+                } else {
+                    if (!empty($upn)) {
+                        $aademailvalidateresult = filter_var($upn, FILTER_VALIDATE_EMAIL);
+                        if (!empty($aademailvalidateresult)) {
+                            $userdata['mail'] = $aademailvalidateresult;
+                        }
+                    }
+                }
+            }
+
+            // Call function in local_o365 to map fields.
+            $updateduser = \local_o365\feature\usersync\main::apply_configured_fieldmap($userdata, new \stdClass(), 'login');
             $userinfo = (array)$updateduser;
+        } else {
+            // If local_o365 is not installed, use default mapping.
+            $userinfo = [];
+
+            $idtoken = \auth_oidc\jwt::instance_from_encoded($tokenrec->idtoken);
+
+            $firstname = $idtoken->claim('given_name');
+            if (!empty($firstname)) {
+                $userinfo['firstname'] = $firstname;
+            }
+
+            $lastname = $idtoken->claim('family_name');
+            if (!empty($lastname)) {
+                $userinfo['lastname'] = $lastname;
+            }
+
+            $email = $idtoken->claim('email');
+            if (!empty($email)) {
+                $userinfo['email'] = $email;
+            } else {
+                if (!empty($upn)) {
+                    $aademailvalidateresult = filter_var($upn, FILTER_VALIDATE_EMAIL);
+                    if (!empty($aademailvalidateresult)) {
+                        $userinfo['email'] = $aademailvalidateresult;
+                    }
+                }
+            }
         }
 
         return $userinfo;
@@ -399,7 +469,11 @@ class base {
                     $hasrestrictions = true;
                     ob_start();
                     try {
-                        $count = @preg_match('/'.$restriction.'/', $tomatch, $matches);
+                        $pattern = '/'.$restriction.'/';
+                        if (isset($this->config->userrestrictionscasesensitive) && !$this->config->userrestrictionscasesensitive) {
+                            $pattern .= 'i';
+                        }
+                        $count = @preg_match($pattern, $tomatch, $matches);
                         if (!empty($count)) {
                             $userpassed = true;
                             break;
@@ -451,6 +525,14 @@ class base {
         // We should not fail here (idtoken was verified earlier to at least contain 'sub', but just in case...).
         if (empty($oidcusername)) {
             throw new \moodle_exception('errorauthinvalididtoken', 'auth_oidc');
+        }
+
+        // Handle "The existing token for this user does not contain a valid user ID" error.
+        if ($userid == 0) {
+            $userrec = $DB->get_record('user', ['username' => $username]);
+            if ($userrec) {
+                $userid = $userrec->id;
+            }
         }
 
         $tokenrec = new \stdClass;

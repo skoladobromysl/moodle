@@ -163,7 +163,8 @@ class block_microsoft extends block_base {
         $aadsync = get_config('local_o365', 'aadsync');
         $aadsync = array_flip(explode(',', $aadsync));
         // Only profile sync once for each session.
-        if (empty($SESSION->block_microsoft_profilesync) && isset($aadsync['photosynconlogin'])) {
+        if (empty($SESSION->block_microsoft_profilesync) &&
+            (isset($aadsync['photosynconlogin']) || isset($aadsync['tzsynconlogin']))) {
             $PAGE->requires->jquery();
             $PAGE->requires->js('/blocks/microsoft/js/microsoft.js');
             $PAGE->requires->js_init_call('microsoft_update_profile', array($CFG->wwwroot));
@@ -308,7 +309,7 @@ class block_microsoft extends block_base {
             }
         }
 
-        // Download Office 365.
+        // Download Microsoft 365.
         $downloadlinks = $this->get_content_o365download();
         foreach ($downloadlinks as $link) {
             $items[] = $link;
@@ -352,7 +353,7 @@ class block_microsoft extends block_base {
     }
 
     /**
-     * Get Office 365 download links (if enabled).
+     * Get Microsoft 365 download links (if enabled).
      *
      * @return array Array of download link HTML, or empty array if download links disabled.
      */

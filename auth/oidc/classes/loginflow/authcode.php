@@ -237,8 +237,8 @@ class authcode extends \auth_oidc\loginflow\base {
         $tokenrec = $DB->get_record('auth_oidc_token', ['oidcuniqid' => $oidcuniqid]);
         if (isloggedin() && !isguestuser() && (empty($tokenrec) || (isset($USER->auth) && $USER->auth !== 'oidc'))) {
 
-            // If user is already logged in and trying to link Office 365 account or use it for OIDC.
-            // Check if that Office 365 account already exists in moodle.
+            // If user is already logged in and trying to link Microsoft 365 account or use it for OIDC.
+            // Check if that Microsoft 365 account already exists in moodle.
             $userrec = $DB->count_records_sql('SELECT COUNT(*)
                                                  FROM {user}
                                                 WHERE username = ?
@@ -417,17 +417,23 @@ class authcode extends \auth_oidc\loginflow\base {
         if (!empty($tokenrec)) {
             // Already connected user.
             if (empty($tokenrec->userid)) {
-                // ERROR1
-                throw new \moodle_exception('exception_tokenemptyuserid', 'auth_oidc');
-            }
-            $user = $DB->get_record('user', ['id' => $tokenrec->userid]);
-            if (empty($user)) {
-                // ERROR2
-                $failurereason = AUTH_LOGIN_NOUSER;
-                $eventdata = ['other' => ['username' => $username, 'reason' => $failurereason]];
-                $event = \core\event\user_login_failed::create($eventdata);
-                $event->trigger();
-                throw new \moodle_exception('errorauthloginfailednouser', 'auth_oidc', null, null, '1');
+                // Existing token record, but missing the user ID.
+                $user = $DB->get_record('user', ['username' => $tokenrec->username]);
+                if (empty($user)) {
+                    throw new \moodle_exception('exception_tokenemptyuserid', 'auth_oidc', null, null, 3);
+                }
+                $tokenrec->userid = $user->id;
+                $DB->update_record('auth_oidc_token', $tokenrec);
+            } else {
+                // Existing token with a user ID.
+                $user = $DB->get_record('user', ['id' => $tokenrec->userid]);
+                if (empty($user)) {
+                    $failurereason = AUTH_LOGIN_NOUSER;
+                    $eventdata = ['other' => ['username' => $user->username, 'reason' => $failurereason]];
+                    $event = \core\event\user_login_failed::create($eventdata);
+                    $event->trigger();
+                    throw new \moodle_exception('errorauthloginfailednouser', 'auth_oidc', null, null, '1');
+                }
             }
             $username = $user->username;
             $this->updatetoken($tokenrec->id, $authparams, $tokenparams);
@@ -452,8 +458,10 @@ class authcode extends \auth_oidc\loginflow\base {
             $username = $this->check_objects($oidcuniqid, $username);
             $matchedwith = $this->check_for_matched($username);
             if (!empty($matchedwith)) {
-                $matchedwith->aadupn = $username;
-                throw new \moodle_exception('errorusermatched', 'local_o365', null, $matchedwith);
+                if ($matchedwith->auth != 'oidc') {
+                    $matchedwith->aadupn = $username;
+                    throw new \moodle_exception('errorusermatched', 'local_o365', null, $matchedwith);
+                }
             }
             $username = trim(\core_text::strtolower($username));
             $tokenrec = $this->createtoken($oidcuniqid, $username, $authparams, $tokenparams, $idtoken);

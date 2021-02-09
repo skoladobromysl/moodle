@@ -55,6 +55,7 @@ class usersyncfieldmap extends fieldmap {
 
         $remotefields = [
             'objectId' => get_string('settings_fieldmap_field_objectId', 'local_o365'),
+            'userPrincipalName' => get_string('settings_fieldmap_field_userPrincipalName', 'local_o365'),
             'displayName' => get_string('settings_fieldmap_field_displayName', 'local_o365'),
             'givenName' => get_string('settings_fieldmap_field_givenName', 'local_o365'),
             'surname' => get_string('settings_fieldmap_field_surname', 'local_o365'),
@@ -69,6 +70,15 @@ class usersyncfieldmap extends fieldmap {
             'companyName' => get_string('settings_fieldmap_field_companyName', 'local_o365'),
             'preferredLanguage' => get_string('settings_fieldmap_field_preferredLanguage', 'local_o365'),
             'employeeId' => get_string('settings_fieldmap_field_employeeId', 'local_o365'),
+            'businessPhones' => get_string('settings_fieldmap_field_businessPhones', 'local_o365'),
+            'faxNumber' => get_string('settings_fieldmap_field_faxNumber', 'local_o365'),
+	        'mobilePhone' => get_string('settings_fieldmap_field_mobilePhone', 'local_o365'),
+            'officeLocation' => get_string('settings_fieldmap_field_officeLocation', 'local_o365'),
+            'preferredName' => get_string('settings_fieldmap_field_preferredName', 'local_o365'),
+            'manager' => get_string('settings_fieldmap_field_manager', 'local_o365'),
+            'teams' => get_string('settings_fieldmap_field_teams', 'local_o365'),
+            'groups' => get_string('settings_fieldmap_field_groups', 'local_o365'),
+            'roles' => get_string('settings_fieldmap_field_roles', 'local_o365'),
         ];
 
         $localfields = [
