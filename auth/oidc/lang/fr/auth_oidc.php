@@ -119,7 +119,6 @@ $string['eventusercreated'] = 'Utilisateur créé avec OpenID Connect';
 $string['eventuserconnected'] = 'Utilisateur connecté à OpenID Connect';
 $string['eventuserloggedin'] = 'Utilisateur identifié avec OpenID Connect';
 $string['eventuserdisconnected'] = 'Utilisateur déconnecté d\'OpenID Connect';
-$string['exception_tokenemptyuserid'] = 'Le jeton existant pour cet utilisateur ne contient pas un ID utilisateur valide. Veuillez contacter votre administrateur.';
 
 $string['oidc:manageconnection'] = 'Permettre la connexion et la déconnexion OpenID';
 $string['oidc:manageconnectionconnect'] = 'Permettre la connexion OpenID';
@@ -136,7 +135,7 @@ $string['privacy:metadata:auth_oidc_token:username'] = 'Le nom d\'utilisateur de
 $string['privacy:metadata:auth_oidc_token:userid'] = 'Le ID de l\'utilisateur Moodle';
 $string['privacy:metadata:auth_oidc_token:oidcusername'] = 'Le nom d\'utilisateur de l\'utilisateur OIDC';
 $string['privacy:metadata:auth_oidc_token:scope'] = 'La portée du jeton';
-$string['privacy:metadata:auth_oidc_token:resource'] = 'La ressource du jeton';
+$string['privacy:metadata:auth_oidc_token:tokenresource'] = 'La ressource du jeton';
 $string['privacy:metadata:auth_oidc_token:authcode'] = 'Le code d\'authentification du jeton';
 $string['privacy:metadata:auth_oidc_token:token'] = 'Le jeton';
 $string['privacy:metadata:auth_oidc_token:expiry'] = 'L\'expiration du jeton';

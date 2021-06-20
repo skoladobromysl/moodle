@@ -88,6 +88,8 @@ $string['cfg_logoutendpoint_key'] = 'Logout Endpoint';
 $string['cfg_logoutendpoint_desc'] = 'The URI of the logout endpoint from your identity provider to use.';
 $string['event_debug'] = 'Debug message';
 
+$string['task_cleanup_oidc_state_and_token'] = 'Clean up OIDC state and invalid token';
+
 $string['errorauthdisconnectemptypassword'] = 'Password cannot be empty';
 $string['errorauthdisconnectemptyusername'] = 'Username cannot be empty';
 $string['errorauthdisconnectusernameexists'] = 'That username is already taken. Please choose a different one.';
@@ -132,7 +134,6 @@ $string['eventusercreated'] = 'User created with OpenID Connect';
 $string['eventuserconnected'] = 'User connected to OpenID Connect';
 $string['eventuserloggedin'] = 'User Logged In with OpenID Connect';
 $string['eventuserdisconnected'] = 'User disconnected from OpenID Connect';
-$string['exception_tokenemptyuserid'] = 'The existing token for this user does not contain a valid user ID. Please contact your administrator.';
 
 $string['oidc:manageconnection'] = 'Allow OpenID Connection and Disconnection';
 $string['oidc:manageconnectionconnect'] = 'Allow OpenID Connection';
@@ -149,7 +150,7 @@ $string['privacy:metadata:auth_oidc_token:username'] = 'The username of the Mood
 $string['privacy:metadata:auth_oidc_token:userid'] = 'The user ID of the Moodle user';
 $string['privacy:metadata:auth_oidc_token:oidcusername'] = 'The username of the OIDC user';
 $string['privacy:metadata:auth_oidc_token:scope'] = 'The scope of the token';
-$string['privacy:metadata:auth_oidc_token:resource'] = 'The resource of the token';
+$string['privacy:metadata:auth_oidc_token:tokenresource'] = 'The resource of the token';
 $string['privacy:metadata:auth_oidc_token:authcode'] = 'The auth code for the token';
 $string['privacy:metadata:auth_oidc_token:token'] = 'The token';
 $string['privacy:metadata:auth_oidc_token:expiry'] = 'The token expiry';

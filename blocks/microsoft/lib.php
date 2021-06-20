@@ -14,10 +14,105 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Plugin local library.
+ *
+ * @package block_microsoft
+ * @author Lai Wei <lai.wei@enovation.ie>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright (C) 2021 onwards Microsoft Open Technologies, Inc. (http://msopentech.com/)
+ */
+
+use local_o365\feature\usergroups\utils;
+
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot . '/local/o365/lib.php');
 
 /**
- * @package block_microsoft
- * @author  Remote-Learner.net Inc
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @copyright (C) 2016 onwards Microsoft Open Technologies, Inc. (http://msopentech.com/)
+ * Return the course sync option of the course with the given ID.
+ *
+ * @param int $courseid
+ *
+ * @return int
  */
+function block_microsoft_get_course_sync_option(int $courseid) {
+    $coursesyncoption = MICROSOFT365_COURSE_SYNC_NONE;
+
+    $groupsyncenabledcourseids = utils::get_enabled_courses();
+    $teamsyncenabledcourseids = utils::get_enabled_courses_with_feature('team');
+
+    if ($teamsyncenabledcourseids === true || $groupsyncenabledcourseids === true) {
+        // Sync is enabled on all courses.
+        $coursesyncoption = MICROSOFT365_COURSE_SYNC_TEAMS;
+    } else if (in_array($courseid, $groupsyncenabledcourseids)) {
+        if (in_array($courseid, $teamsyncenabledcourseids)) {
+            $coursesyncoption = MICROSOFT365_COURSE_SYNC_TEAMS;
+        } else {
+            $coursesyncoption = MICROSOFT365_COURSE_SYNC_GROUPS;
+        }
+    }
+
+    return $coursesyncoption;
+}
+
+/**
+ * Set course sync options.
+ *
+ * @param int $courseid
+ * @param int $syncsetting
+ */
+function block_microsoft_set_course_sync_option(int $courseid, int $syncsetting) {
+    switch ($syncsetting) {
+        case MICROSOFT365_COURSE_SYNC_GROUPS:
+            utils::set_course_group_enabled($courseid);
+            utils::set_course_group_feature_enabled($courseid, ['team'], false);
+
+            break;
+        case MICROSOFT365_COURSE_SYNC_TEAMS:
+            utils::set_course_group_enabled($courseid);
+            utils::set_course_group_feature_enabled($courseid, ['team']);
+
+            break;
+        default:
+            utils::set_course_group_feature_enabled($courseid, ['team'], false);
+            utils::set_course_group_enabled($courseid, false);
+    }
+}
+
+/**
+ * Return the existing course reset setting of the course with the given ID.
+ *
+ * @param int $courseid
+ *
+ * @return string|null
+ */
+function block_microsoft_get_course_reset_setting(int $courseid) {
+    $courseresetsettings = get_config('local_o365', 'courseresetsettings');
+    $courseresetsettings = @json_decode($courseresetsettings, true);
+    if (!empty($courseresetsettings) && is_array($courseresetsettings)) {
+        if (isset($courseresetsettings[$courseid])) {
+            return $courseresetsettings[$courseid];
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Set Teams/group reset settings for the given course to the given value.
+ *
+ * @param int $courseid
+ * @param string $resetsetting
+ */
+function block_microsoft_set_course_reset_setting(int $courseid, string $resetsetting) {
+    $courseresetsettings = get_config('local_o365', 'courseresetsettings');
+    $courseresetsettings = @json_decode($courseresetsettings, true);
+    if (empty($courseresetsettings) || !is_array($courseresetsettings)) {
+        $courseresetsettings = [$courseid => $resetsetting];
+    } else {
+        $courseresetsettings[$courseid] = $resetsetting;
+    }
+
+    set_config('courseresetsettings', json_encode($courseresetsettings), 'local_o365');
+}

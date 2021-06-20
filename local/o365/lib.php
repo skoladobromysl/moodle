@@ -28,6 +28,24 @@ defined('MOODLE_INTERNAL') || die();
  */
 define('TEAMS_MOODLE_APP_EXTERNAL_ID', '2e43119b-fcfe-44f8-b3e5-996ffcb7fb95');
 
+// Teams/group course reset site settings.
+define('TEAMS_GROUP_COURSE_RESET_SITE_SETTING_DO_NOTHING', '1');
+define('TEAMS_GROUP_COURSE_RESET_SITE_SETTING_PER_COURSE', '2');
+define('TEAMS_GROUP_COURSE_RESET_SITE_SETTING_DISCONNECT', '3');
+
+// Teams course reset settings.
+define('TEAMS_COURSE_RESET_SETTING_DO_NOTHING', '1');
+define('TEAMS_COURSE_RESET_SETTING_DISCONNECT', '2');
+
+// Group course reset settings.
+define('GROUP_COURSE_RESET_SETTING_DO_NOTHING', '1');
+define('GROUP_COURSE_RESET_SETTING_DISCONNECT', '2');
+
+// Course sync options.
+define('MICROSOFT365_COURSE_SYNC_NONE', 0);
+define('MICROSOFT365_COURSE_SYNC_GROUPS', 1);
+define('MICROSOFT365_COURSE_SYNC_TEAMS', 2);
+
 /**
  * Retrieve icon image and send to the browser for display.
  *
@@ -92,6 +110,39 @@ function local_o365_connectioncapability($userid, $mode = 'link', $require = fal
     $contextsys = \context_system::instance();
     $contextuser = \context_user::instance($userid);
     return has_capability($cap, $contextsys) || $check($cap, $contextuser);
+}
+
+/**
+ * Creates json data file for application deployment.
+ */
+function local_o365_create_deploy_json() {
+    global $CFG;
+    $data = new stdClass();
+    $data->{'$schema'} = 'https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#';
+    $data->contentVersion = "1.0.0.0";
+    $data->parameters = new stdClass();
+    $data->parameters->LUISPricingTier = ['value' => null];
+    $data->parameters->LUISRegion = ['value' => null];
+    $botappid = get_config('local_o365', 'bot_app_id');
+    $botappidval = (empty($botappid) ? null : $botappid);
+    $data->parameters->botApplicationID = ['value' => $botappidval];
+    $botapppass = get_config('local_o365', 'bot_app_password');
+    $botapppassval = (empty($botapppass) ? null : $botapppass);
+    $data->parameters->botApplicationPassword = ['value' => $botapppassval];
+    $data->parameters->moodleURL = ['value' => $CFG->wwwroot];
+    $appid = get_config('auth_oidc', 'clientid');
+    $appidval = (empty($appid) ? null : $appid);
+    $data->parameters->azureADApplicationID = ['value' => $appidval];
+    $appsecret = get_config('auth_oidc', 'clientsecret');
+    $appsecretval = (empty($appsecret) ? null : $appsecret);
+    $data->parameters->azureADApplicationKey = ['value' => $appsecretval];
+    $apptenant = get_config('local_o365', 'aadtenant');
+    $apptenantval = (empty($apptenant) ? null : $apptenant);
+    $data->parameters->azureADTenant = ['value' => $apptenantval];
+    $botsharedsecret = get_config('local_o365', 'bot_app_password');
+    $botsharedsecretval = (empty($botsharedsecret) ? null : $botsharedsecret);
+    $data->parameters->sharedMoodleSecret = ['value' => $botsharedsecretval];
+    return json_encode($data);
 }
 
 /**

@@ -57,7 +57,7 @@ class observers {
                         'token' => $eventdata['other']['tokenparams']['access_token'],
                         'scope' => $eventdata['other']['tokenparams']['scope'],
                         'refreshtoken' => $eventdata['other']['tokenparams']['refresh_token'],
-                        'resource' => $eventdata['other']['tokenparams']['resource'],
+                        'tokenresource' => $eventdata['other']['tokenparams']['resource'],
                         'expiry' => $eventdata['other']['tokenparams']['expires_on'],
                     ]
                 ];
@@ -93,10 +93,10 @@ class observers {
                 $scope = $eventdata['other']['tokenparams']['scope'];
                 $res = $eventdata['other']['tokenparams']['resource'];
                 $token = new \local_o365\oauth2\token($token, $expiry, $rtoken, $scope, $res, null, $clientdata, $httpclient);
-                $resource = (\local_o365\rest\unified::is_enabled() === true)
-                    ? \local_o365\rest\unified::get_resource()
-                    : \local_o365\rest\discovery::get_resource();
-                $token = \local_o365\oauth2\token::jump_resource($token, $resource, $clientdata, $httpclient);
+                $tokenresource = (\local_o365\rest\unified::is_enabled() === true)
+                    ? \local_o365\rest\unified::get_tokenresource()
+                    : \local_o365\rest\discovery::get_tokenresource();
+                $token = \local_o365\oauth2\token::jump_tokenresource($token, $tokenresource, $clientdata, $httpclient);
                 $apiclient = (\local_o365\rest\unified::is_enabled() === true)
                     ? new \local_o365\rest\unified($token, $httpclient)
                     : new \local_o365\rest\discovery($token, $httpclient);
@@ -119,6 +119,7 @@ class observers {
      */
     public static function handle_oidc_user_connected(\auth_oidc\event\user_connected $event) {
         global $DB;
+
         $caller = '\local_o365\observers::handle_oidc_user_connected';
         if (\local_o365\utils::is_configured() !== true) {
             return false;
@@ -167,8 +168,34 @@ class observers {
                         $userobjectdata->id = $DB->insert_record('local_o365_objects', $userobjectdata);
                     }
                 } else {
-                    \local_o365\utils::debug('no oidcuniqid received', 'handle_oidc_user_connected', $eventdata);
+                    \local_o365\utils::debug('no oidcuniqid received', $caller, $eventdata);
                 }
+
+                # Enrol user to all courses he was enrolled prior to connecting.
+                # Do not attempt to enrol the user if user groups are not enabled.
+                if (\local_o365\feature\usergroups\utils::is_enabled() === true) {
+                    try {
+                        $apiclient = \local_o365\feature\usergroups\utils::get_graphclient();
+                        $courses = enrol_get_users_courses($userid, true);
+
+                        foreach ($courses as $courseid => $course) {
+                            if (\local_o365\feature\usergroups\utils::course_is_group_enabled($courseid) !== true) {
+                                continue;
+                            }
+
+                            $coursecontext = \context_course::instance($courseid);
+
+                            if (has_capability('local/o365:teamowner', $coursecontext)) {
+                                $apiclient->add_owner_to_course_group($courseid, $userid);
+                            } else if (has_capability('local/o365:teammember', $coursecontext)) {
+                                $apiclient->add_user_to_course_group($courseid, $userid);
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        \local_o365\utils::debug('Exception: ' . $e->getMessage(), $caller, $e);
+                    }
+                }
+
                 return true;
             } catch (\Exception $e) {
                 \local_o365\utils::debug($e->getMessage(), 'handle_oidc_user_connected', $e);
@@ -519,13 +546,13 @@ class observers {
      */
     public static function construct_sharepoint_api_with_system_user() {
         try {
-            $spresource = \local_o365\rest\sharepoint::get_resource();
-            if (!empty($spresource)) {
+            $sharepointtokenresource = \local_o365\rest\sharepoint::get_tokenresource();
+            if (!empty($sharepointtokenresource)) {
                 $httpclient = new \local_o365\httpclient();
                 $clientdata = \local_o365\oauth2\clientdata::instance_from_oidc();
-                $sptoken = \local_o365\utils::get_app_or_system_token($spresource, $clientdata, $httpclient);
-                if (!empty($sptoken)) {
-                    $sharepoint = new \local_o365\rest\sharepoint($sptoken, $httpclient);
+                $sharepointtoken = \local_o365\utils::get_app_or_system_token($sharepointtokenresource, $clientdata, $httpclient);
+                if (!empty($sharepointtoken)) {
+                    $sharepoint = new \local_o365\rest\sharepoint($sharepointtoken, $httpclient);
                     return $sharepoint;
                 }
             }
@@ -571,21 +598,48 @@ class observers {
      * Handle course_updated event.
      *
      * Does the following:
-     *     - update associated sharepoint sites and associated groups.
+     *  - update Teams or group names, if the options are enabled.
+     *  - update associated sharepoint sites.
      *
      * @param \core\event\course_updated $event The triggered event.
      * @return bool Success/Failure.
      */
     public static function handle_course_updated(\core\event\course_updated $event) {
-        if (\local_o365\utils::is_configured() !== true || \local_o365\rest\sharepoint::is_configured() !== true) {
+        global $DB;
+
+        if (\local_o365\utils::is_configured() !== true) {
             return false;
         }
         $courseid = $event->objectid;
         $eventdata = $event->get_data();
         if (!empty($eventdata['other'])) {
-            $sharepoint = static::construct_sharepoint_api_with_system_user();
-            if (!empty($sharepoint)) {
-                $sharepoint->update_course_site($courseid, $eventdata['other']['shortname'], $eventdata['other']['fullname']);
+            // Update Teams/group names.
+            $teamsyncenabled = get_config('local_o365', 'team_name_sync');
+            $groupsyncenabled = get_config('local_o365', 'group_name_sync');
+
+            $apiclient = \local_o365\feature\usergroups\utils::get_graphclient();
+            $coursegroups = new \local_o365\feature\usergroups\coursegroups($apiclient, $DB, true);
+
+            if (\local_o365\feature\usergroups\utils::is_enabled() === true) {
+                if (\local_o365\feature\usergroups\utils::course_is_group_feature_enabled($courseid, 'team')) {
+                    if ($teamsyncenabled) {
+                        $coursegroups->update_team_name($courseid);
+                    }
+                } else if (\local_o365\feature\usergroups\utils::course_is_group_enabled($courseid)) {
+                    if ($groupsyncenabled) {
+                        $coursegroups->update_group_name($courseid);
+                    }
+                }
+            }
+
+            // Update sharepoint sites.
+            $shortname = $eventdata['other']['shortname'];
+            $fullname = $eventdata['other']['fullname'];
+            if (\local_o365\rest\sharepoint::is_configured() === true) {
+                $sharepoint = static::construct_sharepoint_api_with_system_user();
+                if (!empty($sharepoint)) {
+                    $sharepoint->update_course_site($courseid, $shortname, $fullname);
+                }
             }
         }
     }

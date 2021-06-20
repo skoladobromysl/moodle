@@ -206,6 +206,19 @@ if ($hassiteconfig) {
         $desc = new lang_string('settings_usergroups_details', 'local_o365');
         $settings->add(new \local_o365\adminsetting\usergroups('local_o365/createteams', $label, $desc, 'off'));
 
+        // Allow course sync controlled at course level.
+        $createteams = get_config('local_o365', 'createteams');
+        if ($createteams == 'oncustom') {
+            $label = new lang_string('settings_usergroups_controlled_per_course', 'local_o365');
+            $desc = new lang_string('settings_usergroups_controlled_per_course_details', 'local_o365');
+            $settings->add(new admin_setting_configcheckbox('local_o365/createteams_per_course', $label, $desc, '0'));
+        }
+
+        // Courses to process per task.
+        $label = new lang_string('settings_usergroups_courses_per_task', 'local_o365');
+        $desc = new lang_string('settings_usergroups_courses_per_task_details', 'local_o365');
+        $settings->add(new admin_setting_configtext('local_o365/courses_per_task', $label, $desc, 5, PARAM_INT));
+
         // Team name section.
         $settings->add(new admin_setting_heading('local_o365_section_team_name',
             new lang_string('settings_secthead_team_name', 'local_o365'),
@@ -236,9 +249,15 @@ if ($hassiteconfig) {
             ''));
 
         // Sample Team name.
-        $sampleteamname = coursegroups::get_sample_team_display_name();
+        $sampleteamname = \local_o365\feature\usergroups\utils::get_sample_team_display_name();
         $settings->add(new admin_setting_heading('local_o365_section_team_name_sample', '',
             get_string('settings_team_name_sample', 'local_o365', $sampleteamname)));
+
+        // Sync Team name.
+        $settings->add(new admin_setting_configcheckbox('local_o365/team_name_sync',
+            get_string('settings_team_name_sync', 'local_o365'),
+            get_string('settings_team_name_sync_desc', 'local_o365'),
+            0));
 
         // Group name section.
         $settings->add(new admin_setting_heading('local_o365_section_group_name',
@@ -282,9 +301,15 @@ if ($hassiteconfig) {
             '', PARAM_TEXT, null, 15));
 
         // Sample group names.
-        $samplegroupnames = coursegroups::get_sample_group_names();
+        $samplegroupnames = \local_o365\feature\usergroups\utils::get_sample_group_names();
         $settings->add(new admin_setting_heading('local_o365_section_group_names_sample', '',
             get_string('settings_group_names_sample', 'local_o365', $samplegroupnames)));
+
+        // Sync group name.
+        $settings->add(new admin_setting_configcheckbox('local_o365/group_name_sync',
+            get_string('settings_group_name_sync', 'local_o365'),
+            get_string('settings_group_name_sync_desc', 'local_o365'),
+            0));
     }
 
     if ($tab === LOCAL_O365_TAB_ADVANCED || !empty($install)) {
@@ -311,6 +336,12 @@ if ($hassiteconfig) {
         $desc = new lang_string('settings_userconnections_details', 'local_o365');
         $settings->add(new \local_o365\adminsetting\toollink('local_o365/userconnections', $label, $linktext, $linkurl, $desc));
 
+        $label = new lang_string('settings_teamconnections', 'local_o365');
+        $linktext = new lang_string('settings_teamconnections_linktext', 'local_o365');
+        $linkurl = new \moodle_url('/local/o365/acp.php', ['mode' => 'teamconnections']);
+        $desc = new lang_string('settings_teamconnections_details', 'local_o365');
+        $settings->add(new \local_o365\adminsetting\toollink('local_o365/teamconnections', $label, $linktext, $linkurl, $desc));
+
         $label = new lang_string('settings_usermatch', 'local_o365');
         $linktext = new lang_string('settings_usermatch', 'local_o365');
         $linkurl = new \moodle_url('/local/o365/acp.php', ['mode' => 'usermatch']);
@@ -331,6 +362,25 @@ if ($hassiteconfig) {
         $label = new lang_string('settings_group_creation_fallback', 'local_o365');
         $desc = new lang_string('settings_group_creation_fallback_details', 'local_o365');
         $settings->add(new \admin_setting_configcheckbox('local_o365/group_creation_fallback', $label, $desc, '1'));
+
+        // Course reset Teams settings.
+        if (\local_o365\feature\usergroups\utils::is_enabled()) {
+            $label = new lang_string('settings_course_reset_teams', 'local_o365');
+            $desc = new lang_string('settings_course_reset_teams_details', 'local_o365');
+            $settings->add(new \local_o365\adminsetting\courseresetteams('local_o365/course_reset_teams', $label, $desc,
+                TEAMS_GROUP_COURSE_RESET_SITE_SETTING_DO_NOTHING));
+        }
+
+        // Reset team name prefix.
+        $label = new lang_string('settings_reset_team_name_prefix', 'local_o365');
+        $desc = new lang_string('settings_reset_team_name_prefix_details', 'local_o365');
+        $settings->add(new \admin_setting_configtext('local_o365/reset_team_name_prefix', $label, $desc, '(archived) ', PARAM_TEXT));
+
+        // Reset group name prefix.
+        $label = new lang_string('settings_reset_group_name_prefix', 'local_o365');
+        $desc = new lang_string('settings_reset_group_name_prefix_details', 'local_o365');
+        $settings->add(new \admin_setting_configtext('local_o365/reset_group_name_prefix', $label, $desc, '(disconnected) ',
+            PARAM_TEXT));
 
         $label = new lang_string('settings_o365china', 'local_o365');
         $desc = new lang_string('settings_o365china_details', 'local_o365');
@@ -392,8 +442,8 @@ if ($hassiteconfig) {
         try {
             $httpclient = new \local_o365\httpclient();
             $clientdata = \local_o365\oauth2\clientdata::instance_from_oidc();
-            $resource = \local_o365\rest\sds::get_resource();
-            $token = \local_o365\oauth2\systemapiusertoken::instance(null, $resource, $clientdata, $httpclient);
+            $tokenresource = \local_o365\rest\sds::get_tokenresource();
+            $token = \local_o365\oauth2\systemapiusertoken::instance(null, $tokenresource, $clientdata, $httpclient);
             $schools = null;
             if (!empty($token)) {
                 $apiclient = new \local_o365\rest\sds($token, $httpclient);
@@ -491,6 +541,19 @@ if ($hassiteconfig) {
             get_string('settings_bot_app_password_desc', 'local_o365'),
             ''));
 
+        // Download JSON settings file.
+        $jsondownloadhtml = $OUTPUT->box_start('form-item row local_o365_settings_teams_banner_part_2');
+        $jsondownloadhtml .= html_writer::start_tag('p', ['class' => 'local_o365_settings_teams_horizontal_spacer']);
+        $jsondownloadhtml .= get_string('settings_teams_download_json_desc', 'local_o365');
+        $jsondownloadhtml .= html_writer::end_tag('p');
+        $jsondownloadhtml .= html_writer::start_tag('p', ['class' => 'local_o365_settings_teams_horizontal_spacer']);
+        $jsondownloadurl = new moodle_url('/local/o365/json_download.php', ['sesskey' => sesskey()]);
+        $jsondownloadhtml .= html_writer::link($jsondownloadurl, get_string('settings_teams_download_json', 'local_o365'),
+            ['class' => 'btn btn-primary']);
+        $jsondownloadhtml .= html_writer::end_tag('p');
+        $jsondownloadhtml .= $OUTPUT->box_end();
+        $settings->add(new admin_setting_heading('local_o365/teams_json_download', '', $jsondownloadhtml));
+
         // Deploy button.
         $deploybuttonhtml = html_writer::start_div('form-item row local_o365_settings_teams_banner_part_2',
             ['id' => 'admin-teams-bot-deploy']);
@@ -565,7 +628,7 @@ if ($hassiteconfig) {
             if (\local_o365\utils::is_configured_apponlyaccess() !== true) {
                 $httpclient = new \local_o365\httpclient();
                 $clientdata = \local_o365\oauth2\clientdata::instance_from_oidc();
-                $unifiedresource = \local_o365\rest\unified::get_resource();
+                $unifiedresource = \local_o365\rest\unified::get_tokenresource();
                 $unifiedtoken = \local_o365\utils::get_app_or_system_token($unifiedresource, $clientdata, $httpclient);
 
                 if (!empty($unifiedtoken)) {
@@ -597,5 +660,12 @@ if ($hassiteconfig) {
 
             $settings->add(new admin_setting_heading('set_moodle_app_id_instruction_header', '', $setmoodleappidinstructionhtml));
         }
+    }
+
+    // Redirect back to the tab after configuration change.
+    if ($PAGE->has_set_url()) {
+        $taburl = $PAGE->url;
+        $taburl->param('s_local_o365_tabs', $tab);
+        $PAGE->set_url($taburl);
     }
 }

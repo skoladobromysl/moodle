@@ -75,15 +75,15 @@ class main {
         }
 
         if ($uselegacy === true) {
-            $resource = \local_o365\rest\azuread::get_resource();
-            $token = \local_o365\oauth2\systemapiusertoken::instance(null, $resource, $this->clientdata, $this->httpclient);
+            $tokenresource = \local_o365\rest\azuread::get_tokenresource();
+            $token = \local_o365\oauth2\systemapiusertoken::instance(null, $tokenresource, $this->clientdata, $this->httpclient);
             if (empty($token)) {
                 throw new \Exception('No token available for usersync');
             }
             return new \local_o365\rest\azuread($token, $this->httpclient);
         } else {
-            $resource = \local_o365\rest\unified::get_resource();
-            $token = \local_o365\utils::get_app_or_system_token($resource, $this->clientdata, $this->httpclient);
+            $tokenresource = \local_o365\rest\unified::get_tokenresource();
+            $token = \local_o365\utils::get_app_or_system_token($tokenresource, $this->clientdata, $this->httpclient);
             if (empty($token)) {
                 throw new \Exception('No token available for usersync');
             }
@@ -101,16 +101,16 @@ class main {
     public function construct_outlook_api($muserid, $systemfallback = true) {
         $unifiedconfigured = \local_o365\rest\unified::is_configured();
         if ($unifiedconfigured === true) {
-            $resource = \local_o365\rest\unified::get_resource();
+            $tokenresource = \local_o365\rest\unified::get_tokenresource();
         } else {
-            $resource = \local_o365\rest\outlook::get_resource();
+            $tokenresource = \local_o365\rest\outlook::get_tokenresource();
         }
 
-        $token = \local_o365\oauth2\token::instance($muserid, $resource, $this->clientdata, $this->httpclient);
+        $token = \local_o365\oauth2\token::instance($muserid, $tokenresource, $this->clientdata, $this->httpclient);
         if (empty($token) && $systemfallback === true) {
             $token = ($unifiedconfigured === true)
-                ? \local_o365\utils::get_app_or_system_token($resource, $this->clientdata, $this->httpclient)
-                : \local_o365\oauth2\systemapiusertoken::instance(null, $resource, $this->clientdata, $this->httpclient);
+                ? \local_o365\utils::get_app_or_system_token($tokenresource, $this->clientdata, $this->httpclient)
+                : \local_o365\oauth2\systemapiusertoken::instance(null, $tokenresource, $this->clientdata, $this->httpclient);
         }
         if (empty($token)) {
             throw new \Exception('No token available for user #'.$muserid);
@@ -262,8 +262,8 @@ class main {
      * @param $user
      */
     public function sync_timezone($muserid, $user) {
-        $resource = \local_o365\rest\unified::get_resource();
-        $token = \local_o365\utils::get_app_or_system_token($resource, $this->clientdata, $this->httpclient);
+        $tokenresource = \local_o365\rest\unified::get_tokenresource();
+        $token = \local_o365\utils::get_app_or_system_token($tokenresource, $this->clientdata, $this->httpclient);
         if (empty($token)) {
             throw new \Exception('No token available for usersync');
         }
@@ -351,8 +351,8 @@ class main {
     }
 
     public function get_users_delta($params = 'default', $skiptoken = null, $deltatoken = null) {
-        $resource = \local_o365\rest\unified::get_resource();
-        $token = \local_o365\utils::get_app_or_system_token($resource, $this->clientdata, $this->httpclient);
+        $tokenresource = \local_o365\rest\unified::get_tokenresource();
+        $token = \local_o365\utils::get_app_or_system_token($tokenresource, $this->clientdata, $this->httpclient);
         if (empty($token)) {
             throw new \Exception('No token available for usersync');
         }
@@ -593,8 +593,8 @@ class main {
             try {
                 $httpclient = new \local_o365\httpclient();
                 $clientdata = \local_o365\oauth2\clientdata::instance_from_oidc();
-                $resource = \local_o365\rest\unified::get_resource();
-                $token = \local_o365\utils::get_app_or_system_token($resource, $clientdata, $httpclient);
+                $tokenresource = \local_o365\rest\unified::get_tokenresource();
+                $token = \local_o365\utils::get_app_or_system_token($tokenresource, $clientdata, $httpclient);
                 $apiclient = new \local_o365\rest\unified($token, $httpclient);
             } catch (\Exception $e) {
                 \local_o365\utils::debug('Could not construct graph api', 'check_usercreationrestriction', $e);
@@ -955,13 +955,17 @@ class main {
 
                 // Update existing user on moodle from AD
                 if ($existinguser->auth === 'oidc') {
-                    if(isset($aadsync['update'])) {
+                    if (isset($aadsync['update'])) {
                         $this->mtrace('Updating Moodle user data from Azure AD user data.');
                         $fullexistinguser = get_complete_user_data('username', $existinguser->username);
-                        $existingusercopy = \core_user::get_user_by_username($existinguser->username);
-                        $fullexistinguser->description = $existingusercopy->description;
-                        $this->update_user_from_aaddata($user, $fullexistinguser);
-                        $this->mtrace('User is now updated.');
+                        if ($fullexistinguser) {
+                            $existingusercopy = \core_user::get_user_by_username($existinguser->username);
+                            $fullexistinguser->description = $existingusercopy->description;
+                            $this->update_user_from_aaddata($user, $fullexistinguser);
+                            $this->mtrace('User is now updated.');
+                        } else {
+                            $this->mtrace('Update failed for user with username "' . $existinguser->username . '".');
+                        }
                     }
                 }
             }
@@ -972,6 +976,8 @@ class main {
     protected function sync_new_user($syncoptions, $aaduserdata) {
         global $DB;
         $this->mtrace('User doesn\'t exist in Moodle');
+
+        $newmuser = null;
 
         $userobjectid = (\local_o365\rest\unified::is_configured())
             ? $aaduserdata['id']
@@ -1185,8 +1191,8 @@ class main {
         try {
             $httpclient = new \local_o365\httpclient();
             $clientdata = \local_o365\oauth2\clientdata::instance_from_oidc();
-            $resource = \local_o365\rest\unified::get_resource();
-            $token = \local_o365\utils::get_app_or_system_token($resource, $clientdata, $httpclient);
+            $tokenresource = \local_o365\rest\unified::get_tokenresource();
+            $token = \local_o365\utils::get_app_or_system_token($tokenresource, $clientdata, $httpclient);
             $apiclient = new \local_o365\rest\unified($token, $httpclient);
         } catch (\Exception $e) {
             \local_o365\utils::debug('Could not construct graph api', 'delete_users', $e);
